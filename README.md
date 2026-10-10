@@ -9,7 +9,9 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 - Latihan membaca, mengucapkan, menulis, dan pilihan ganda
 - Ujian naik level: 8 soal di level 1, lalu bertambah 2 soal tiap level (maksimal 30), lulus minimal 80%
 - Ujian akhir 40 soal untuk tiap tingkat sebelum tingkat berikutnya terbuka
-- Progres tersimpan di browser (localStorage), jadi terpisah per perangkat
+- Dashboard bersih: pilih Mandarin atau Inggris, lalu tingkat, lalu level
+- Progres belajar per bahasa (persen level yang sudah lulus) dan streak 🔥 yang bertambah tiap hari ada soal yang dijawab
+- Progres dan streak tersimpan di browser (localStorage), jadi terpisah per perangkat
 
 ## Online lewat GitHub Pages
 

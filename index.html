@@ -38,6 +38,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-of
 .g{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.g .btn{margin:0}
 .good{color:var(--ok)}.nope{color:var(--bad)}
 input{width:100%;padding:.7rem;font:inherit;border:1px solid var(--ln);border-radius:8px;background:var(--cd);color:var(--ink);margin-bottom:.4rem}
+.hd{display:flex;justify-content:space-between;align-items:center}
+.fire{display:flex;align-items:center;gap:.35rem;padding:.3rem .8rem;border:1px solid var(--ln);border-radius:999px;background:var(--cd);filter:grayscale(1);opacity:.65}
+.fire.on{filter:none;opacity:1;border-color:#f59e0b}
+.fire span{font-size:1.5rem;line-height:1}.fire b{font-size:1.25rem}
+.cat{display:block;width:100%;text-align:left;margin:.8rem 0;padding:1.1rem 1.1rem 1rem;border:1px solid var(--ln);border-left:5px solid var(--acc);border-radius:10px;background:var(--cd)}
+.cat:disabled{opacity:.5;cursor:default}
+.cat.zh{--acc:var(--zh)}.cat.en{--acc:var(--en)}
+.cat .big{display:block;margin:0 0 .1rem;font-size:1.7rem}
+.bar{display:block;height:8px;background:var(--ln);border-radius:4px;margin:.7rem 0 .4rem;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
 </style>
 </head>
 <body class="zh"><main id="app"></main>
@@ -109,31 +119,47 @@ const save=()=>{try{localStorage.setItem("dwi",JSON.stringify(S))}catch(e){}};
 const $=s=>document.querySelector(s),app=$("#app"),C=()=>D[lang],P=()=>(S[lang]=S[lang]||{p:{},x:{}});
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
 const norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\u4e00-\u9fff]/g,"");
-function lv(){let id=0,o=[];C().t.forEach((t,ti)=>t.forEach(([name,s],li)=>{id++;o.push({id,ti,li,name,n:Math.min(6+2*id,30),it:s.split(";").map(x=>{const[w,r,m]=x.split("|");return{w,r,m}})})}));return o}
+function lv(c=lang){let id=0,o=[];D[c].t.forEach((t,ti)=>t.forEach(([name,s],li)=>{id++;o.push({id,ti,li,name,n:Math.min(6+2*id,30),it:s.split(";").map(x=>{const[w,r,m]=x.split("|");return{w,r,m}})})}));return o}
 const all=()=>lv().flatMap(l=>l.it);
 const lvOpen=l=>l.id==1||(p=>p.ti!=l.ti?(P().x[p.ti]||0)>=EXP:(P().p[p.id]||0)>=PASS)(lv().find(z=>z.id==l.id-1));
 const exOpen=ti=>lv().filter(l=>l.ti==ti).every(l=>(P().p[l.id]||0)>=PASS);
 function sp(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=C().l;u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
-function setL(c){lang=c;document.body.className=c;home()}
+const dk=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=()=>dk(new Date()),yest=()=>{const d=new Date();return dk(new Date(d.getFullYear(),d.getMonth(),d.getDate()-1))};
+function touch(){const t=today();if(S.last==t)return;S.n=S.last==yest()?(S.n||0)+1:1;S.last=t;save()}
+const streak=()=>S.last==today()||S.last==yest()?(S.n||0):0;
+const cp=c=>{const L=lv(c),d=L.filter(l=>((S[c]||{p:{}}).p[l.id]||0)>=PASS).length;return[d,L.length,Math.round(d/L.length*100)]};
 function home(){
- const Ls=lv(),p=P();
- let h=`<h1>Dwibahasa</h1><p class=mut>Mandarin dan Inggris untuk percakapan sehari-hari, film, dan cara menjelaskan sesuatu. Lulus level dulu, baru naik tingkat.</p><div class=tabs>${Object.keys(D).map(c=>`<button class="tab ${c==lang?"on":""}" onclick="setL('${c}')">${D[c].n}</button>`).join("")}</div>`;
+ const n=streak(),on=S.last==today();
+ let h=`<div class=hd><h1>Dwibahasa</h1><div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div><p class=mut>${on?"Hari ini sudah belajar. Apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."}</p>`;
+ Object.keys(D).forEach(c=>{const[d,t,p]=cp(c);h+=`<button class="cat ${c}" onclick="tiers('${c}')"><span class=big>${c=="zh"?"中文":"English"}</span><span>${D[c].n}</span><span class=bar><i style="width:${p}%"></i></span><small>${p}% selesai, ${d} dari ${t} level</small></button>`});
+ app.innerHTML=h;
+}
+function tiers(c){
+ lang=c;document.body.className=c;
+ const L=lv(),p=P();
+ let h=`<button class=sm onclick="home()">Kembali</button><h2 style="margin-top:1rem">${D[c].n}</h2><p class=mut>Pilih tingkat belajarmu.</p>`;
  TN.forEach((tn,ti)=>{
-  const open=ti==0||(p.x[ti-1]||0)>=EXP,ex=p.x[ti]||0;
-  h+=`<section class="t ${open?"":"lock"}"><h2>${tn} <small>${Ls.filter(l=>l.ti==ti).reduce((a,l)=>a+l.it.length,0)} kosakata</small> ${open?"":"🔒"}</h2>`;
-  Ls.filter(l=>l.ti==ti).forEach(l=>{const s=p.p[l.id]||0,o=lvOpen(l);h+=`<button class=row ${o?"":"disabled"} onclick="lvScreen(${l.id})"><span>Level ${l.id}: ${l.name}<br><small>${l.n} soal ujian</small></span><span>${s>=PASS?"✓ "+s+"%":o?"Mulai":"🔒"}</span></button>`});
-  h+=`<button class="row x" ${exOpen(ti)?"":"disabled"} onclick="exam(${ti})"><span>Ujian akhir ${tn}<br><small>40 soal dari seluruh materi ${tn}, lulus ${EXP}%</small></span><span>${ex>=EXP?"✓ "+ex+"%":exOpen(ti)?"Mulai":"🔒"}</span></button></section>`;
+  const ls=L.filter(l=>l.ti==ti),d=ls.filter(l=>(p.p[l.id]||0)>=PASS).length,pc=Math.round(d/ls.length*100),open=ti==0||(p.x[ti-1]||0)>=EXP;
+  h+=`<button class=cat ${open?"":"disabled"} onclick="levels(${ti})"><span class=big>${tn} ${open?"":"🔒"}</span><span class=bar><i style="width:${pc}%"></i></span><small>${open?pc+"% selesai, "+d+" dari "+ls.length+" level":"Lulus ujian akhir "+TN[ti-1]+" untuk membuka"}</small></button>`;
  });
+ app.innerHTML=h;
+}
+function levels(ti){
+ const L=lv().filter(l=>l.ti==ti),p=P(),tn=TN[ti],ex=p.x[ti]||0;
+ let h=`<button class=sm onclick="tiers(lang)">Kembali</button><h2 style="margin-top:1rem">${D[lang].n}: ${tn}</h2>`;
+ L.forEach(l=>{const s=p.p[l.id]||0,o=lvOpen(l);h+=`<button class=row ${o?"":"disabled"} onclick="lvScreen(${l.id})"><span>Level ${l.id}: ${l.name}<br><small>${l.n} soal ujian</small></span><span>${s>=PASS?"✓ "+s+"%":o?"Mulai":"🔒"}</span></button>`});
+ h+=`<button class="row x" ${exOpen(ti)?"":"disabled"} onclick="exam(${ti})"><span>Ujian akhir ${tn}<br><small>40 soal dari seluruh materi ${tn}, lulus ${EXP}%</small></span><span>${ex>=EXP?"✓ "+ex+"%":exOpen(ti)?"Mulai":"🔒"}</span></button>`;
  app.innerHTML=h;
 }
 function lvScreen(id){
  const l=lv().find(z=>z.id==id);
- app.innerHTML=`<button class=sm onclick="home()">Kembali</button><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
+ app.innerHTML=`<button class=sm onclick="levels(${l.ti})">Kembali</button><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
 }
 const mk=(it,n,ty=TY)=>{let a=[],q=[];for(let i=0;i<n;i++){if(i%it.length==0)a=shuf(it);q.push({it:a[i%it.length],ty:ty[i%ty.length]})}return q};
 function drill(id,t){const l=lv().find(z=>z.id==id);run(mk(l.it,5,[t]),{kind:"dr",t:0,back:`lvScreen(${id})`})}
 function quiz(id){const Ls=lv(),l=Ls.find(z=>z.id==id);run(mk(Ls.filter(z=>z.ti==l.ti&&z.li<=l.li).flatMap(z=>z.it),l.n),{kind:"lv",id,t:PASS,back:`lvScreen(${id})`})}
-function exam(ti){run(mk(lv().filter(z=>z.ti==ti).flatMap(z=>z.it),40),{kind:"ex",id:ti,t:EXP,back:"home()"})}
+function exam(ti){run(mk(lv().filter(z=>z.ti==ti).flatMap(z=>z.it),40),{kind:"ex",id:ti,t:EXP,back:`levels(${ti})`})}
 function run(q,c){Q=q;ctx=c;k=0;sc=0;ask()}
 function ask(){
  if(k>=Q.length)return fin();
@@ -157,7 +183,7 @@ function mic(b){
   s.onresult=e=>{const t=e.results[0][0].transcript,n=norm(t);b.remove();fb(n==norm(w)||(!!r&&n==norm(r)),"Terdengar: "+t)};
   s.onerror=man;s.start()}catch(e){man()}
 }
-function fb(ok,note){
+function fb(ok,note){touch();
  if(ok)sc++;
  document.querySelectorAll(".opt,.btn").forEach(x=>x.disabled=true);
  $("#fb").innerHTML=`<p class="${ok?"good":"nope"}">${ok?"✓ Benar!":"✗ Belum tepat"}${note?". "+note:""}<br><small>${A}</small></p><button class=btn onclick="k++;ask()">Lanjut</button>`;
