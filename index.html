@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dwibahasa: Belajar Mandarin dan Inggris</title>
+<meta name="description" content="Belajar Mandarin dan Inggris dari dasar sampai mahir">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌏</text></svg>">
+<style>
+:root{--bg:#f2f4f8;--cd:#fff;--ink:#14213d;--mut:#5b6678;--ln:#d6dbe5;--ok:#15803d;--bad:#b91c1c;--zh:#b4232a;--en:#1e56c8;--oa:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--cd:#182136;--ink:#e8ecf5;--mut:#97a3b8;--ln:#2a3550;--ok:#4ade80;--bad:#f87171;--zh:#ef6a6f;--en:#6ea0ff;--oa:#0f1624}}
+:root[data-theme="dark"]{--bg:#0f1624;--cd:#182136;--ink:#e8ecf5;--mut:#97a3b8;--ln:#2a3550;--ok:#4ade80;--bad:#f87171;--zh:#ef6a6f;--en:#6ea0ff;--oa:#0f1624}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{--acc:var(--zh);margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+body.en{--acc:var(--en)}
+main{max-width:620px;margin:0 auto;padding:1.2rem 1rem 3rem}
+h1{font:700 2rem/1.1 Georgia,"Songti SC","Noto Serif SC",serif;margin:.2rem 0}
+h2{font:700 1.25rem Georgia,"Songti SC",serif;margin:0 0 .5rem}h3{margin:1.2rem 0 .4rem}
+button{font:inherit;cursor:pointer;color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.t{border-top:2px solid var(--ink);padding:1rem 0;margin-top:1rem}
+.lock h2{opacity:.55}
+.btn{background:var(--acc);color:var(--oa);border:0;border-radius:8px;padding:.7rem 1.1rem;margin:.3rem 0;font-weight:600}
+.btn:disabled{opacity:.45}
+.sm{background:none;border:1px solid var(--ln);border-radius:6px;padding:.25rem .6rem}
+.opt,.row{display:flex;justify-content:space-between;align-items:center;gap:.6rem;width:100%;text-align:left;margin:.4rem 0;padding:.7rem .8rem;border:1px solid var(--ln);border-radius:8px;background:var(--cd)}
+.row:disabled{opacity:.5;cursor:default}
+.row.x{border-style:dashed}
+.opt.ok{border-color:var(--ok);color:var(--ok)}.opt.bad{border-color:var(--bad);color:var(--bad)}
+.tabs{display:flex;gap:.5rem;margin:.8rem 0}
+.tab{flex:1;padding:.6rem;border:1px solid var(--ln);border-radius:8px;background:var(--cd);font-weight:600}
+.tab.on{background:var(--acc);color:var(--oa);border-color:var(--acc)}
+.q{border-left:4px solid var(--acc);background:var(--cd);padding:1rem 1rem 1rem 1.2rem;margin:.8rem 0;border-radius:0 12px 12px 0}
+.big{font:2.1rem/1.25 Georgia,"Songti SC","Noto Serif SC",serif;margin:.5rem 0}
+.mut,small{color:var(--mut)}
+.v{display:flex;gap:.7rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--ln)}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.g .btn{margin:0}
+.good{color:var(--ok)}.nope{color:var(--bad)}
+input{width:100%;padding:.7rem;font:inherit;border:1px solid var(--ln);border-radius:8px;background:var(--cd);color:var(--ink);margin-bottom:.4rem}
+</style>
+</head>
+<body class="zh"><main id="app"></main>
+<script>
+const D={
+ zh:{n:"Mandarin",l:"zh-CN",t:[
+  [
+   ["Sapaan","你好|nǐ hǎo|halo;谢谢|xièxie|terima kasih;对不起|duìbuqǐ|maaf;请|qǐng|tolong, silakan;再见|zàijiàn|sampai jumpa;是|shì|ya, adalah"],
+   ["Sehari-hari","办公室在哪里|bàngōngshì zài nǎlǐ|di mana kantornya?;多少钱|duōshao qián|berapa harganya?;我需要帮助|wǒ xūyào bāngzhù|saya butuh bantuan;明天见|míngtiān jiàn|sampai jumpa besok;我不明白|wǒ bù míngbai|saya tidak mengerti;很高兴认识你|hěn gāoxìng rènshi nǐ|senang bertemu Anda"],
+   ["Angka","一|yī|satu;二|èr|dua;三|sān|tiga;四|sì|empat;五|wǔ|lima;十|shí|sepuluh;一百|yì bǎi|seratus;一千|yì qiān|seribu"],
+   ["Waktu dan hari","今天|jīntiān|hari ini;明天|míngtiān|besok;昨天|zuótiān|kemarin;现在|xiànzài|sekarang;早上|zǎoshang|pagi;晚上|wǎnshang|malam;星期一|xīngqī yī|hari Senin;周末|zhōumò|akhir pekan"],
+   ["Orang dan keluarga","我|wǒ|saya;你|nǐ|kamu;他|tā|dia (laki-laki);她|tā|dia (perempuan);朋友|péngyou|teman;家人|jiārén|keluarga;老师|lǎoshī|guru;孩子|háizi|anak"],
+   ["Makanan dan minuman","水|shuǐ|air;茶|chá|teh;咖啡|kāfēi|kopi;米饭|mǐfàn|nasi;面条|miàntiáo|mi;鸡肉|jīròu|daging ayam;水果|shuǐguǒ|buah;牛奶|niúnǎi|susu"],
+   ["Kata kerja","吃|chī|makan;喝|hē|minum;去|qù|pergi;来|lái|datang;看|kàn|melihat;说|shuō|berbicara;买|mǎi|membeli;有|yǒu|memiliki"],
+   ["Kata sifat","大|dà|besar;小|xiǎo|kecil;好|hǎo|baik, bagus;新|xīn|baru;快|kuài|cepat;贵|guì|mahal;便宜|piányi|murah;忙|máng|sibuk"],
+   ["Tempat dan transportasi","家|jiā|rumah;学校|xuéxiào|sekolah;公司|gōngsī|perusahaan;商店|shāngdiàn|toko;医院|yīyuàn|rumah sakit;机场|jīchǎng|bandara;出租车|chūzūchē|taksi;地铁|dìtiě|kereta bawah tanah"],
+   ["Kantor","会议|huìyì|rapat;电话|diànhuà|telepon;电脑|diànnǎo|komputer;邮件|yóujiàn|surel;文件|wénjiàn|dokumen;工作|gōngzuò|pekerjaan;同事|tóngshì|rekan kerja;老板|lǎobǎn|atasan"]
+  ],
+  [
+   ["Reaksi sehari-hari","真的吗|zhēn de ma|benarkah?;太棒了|tài bàng le|keren sekali;不可能|bù kěnéng|mustahil;别担心|bié dānxīn|jangan khawatir;怎么了|zěnme le|ada apa?;没问题|méi wèntí|tidak masalah;小心点|xiǎoxīn diǎn|hati-hati"],
+   ["Mengajak dan menolak","一起去吧|yìqǐ qù ba|ayo pergi bersama;等一下|děng yíxià|tunggu sebentar;我马上到|wǒ mǎshàng dào|saya segera sampai;快点|kuài diǎn|cepatlah;随便|suíbiàn|terserah;下次吧|xià cì ba|lain kali saja;我请客|wǒ qǐngkè|saya yang traktir"],
+   ["Berbelanja","这是什么|zhè shì shénme|ini apa?;有别的颜色吗|yǒu bié de yánsè ma|ada warna lain?;可以试一下吗|kěyǐ shì yíxià ma|boleh dicoba?;能便宜一点吗|néng piányi yìdiǎn ma|bisa lebih murah?;我只是看看|wǒ zhǐshì kànkan|saya hanya melihat-lihat;我要这个|wǒ yào zhège|saya mau yang ini;可以刷卡吗|kěyǐ shuākǎ ma|bisa bayar pakai kartu?"],
+   ["Ciri-ciri benda","轻|qīng|ringan;重|zhòng|berat;结实|jiēshi|kokoh;防水|fángshuǐ|tahan air;好用|hǎoyòng|enak dipakai;方便|fāngbiàn|praktis;容易坏|róngyì huài|mudah rusak"],
+   ["Cara pakai","打开|dǎkāi|membuka, menyalakan;关掉|guāndiào|mematikan;按一下|àn yíxià|tekan sekali;充电|chōngdiàn|mengisi daya;插上|chāshàng|mencolokkan;拧紧|nǐngjǐn|mengencangkan;慢慢来|mànmàn lái|pelan-pelan saja"],
+   ["Perasaan dan pendapat","我觉得|wǒ juéde|menurut saya;我喜欢|wǒ xǐhuan|saya suka;我不喜欢|wǒ bù xǐhuan|saya tidak suka;有点贵|yǒudiǎn guì|agak mahal;很有意思|hěn yǒu yìsi|menarik sekali;我有点累|wǒ yǒudiǎn lèi|saya agak capek;我同意|wǒ tóngyì|saya setuju"]
+  ],
+  [
+   ["Menjelaskan produk","这个是用来煮饭的|zhège shì yònglái zhǔ fàn de|ini dipakai untuk memasak nasi;它的电池能用一整天|tā de diànchí néng yòng yì zhěng tiān|baterainya tahan seharian;它比旧款更轻更薄|tā bǐ jiùkuǎn gèng qīng gèng báo|lebih ringan dan tipis dari model lama;它是用不锈钢做的|tā shì yòng bùxiùgāng zuò de|dibuat dari baja tahan karat;只要按一下就可以了|zhǐyào àn yíxià jiù kěyǐ le|cukup tekan sekali saja;这个有一年保修|zhège yǒu yì nián bǎoxiū|garansinya satu tahun;它特别适合新手|tā tèbié shìhé xīnshǒu|sangat cocok untuk pemula"],
+   ["Menjelaskan sesuatu","简单来说|jiǎndān lái shuō|singkatnya;比如说|bǐrú shuō|misalnya;换句话说|huàn jù huà shuō|dengan kata lain;原因是这样的|yuányīn shì zhèyàng de|alasannya begini;首先要检查一下|shǒuxiān yào jiǎnchá yíxià|pertama, kita harus periksa dulu;这就是为什么|zhè jiù shì wèishénme|itulah sebabnya;你明白我的意思吗|nǐ míngbai wǒ de yìsi ma|apakah kamu mengerti maksudku?"],
+   ["Seperti di film","你开什么玩笑|nǐ kāi shénme wánxiào|kamu bercanda, ya?;我受够了|wǒ shòugòu le|saya sudah muak;我们得离开这里|wǒmen děi líkāi zhèlǐ|kita harus pergi dari sini;相信我|xiāngxìn wǒ|percayalah padaku;我有不好的预感|wǒ yǒu bù hǎo de yùgǎn|perasaanku tidak enak;这不是你的错|zhè bú shì nǐ de cuò|ini bukan salahmu;我再也不会回来了|wǒ zài yě bú huì huílái le|aku tidak akan kembali lagi"],
+   ["Bercerita dan mengeluh","你猜怎么着|nǐ cāi zěnmezhe|coba tebak apa?;后来才发现|hòulái cái fāxiàn|belakangan baru ketahuan;结果完全不一样|jiéguǒ wánquán bù yíyàng|hasilnya benar-benar beda;我差点忘了|wǒ chàdiǎn wàng le|saya hampir lupa;没想到会这样|méi xiǎngdào huì zhèyàng|tak disangka jadi begini;说来话长|shuō lái huà cháng|ceritanya panjang;别提了|bié tí le|jangan ditanya"],
+   ["Membandingkan dan meyakinkan","这个比那个划算|zhège bǐ nàge huásuàn|ini lebih hemat daripada itu;虽然贵，但是很耐用|suīrán guì, dànshì hěn nàiyòng|meski mahal, tapi awet;值得一试|zhídé yí shì|layak dicoba;我保证你会喜欢|wǒ bǎozhèng nǐ huì xǐhuan|saya jamin kamu akan suka;不是我自夸|bú shì wǒ zìkuā|bukan membual;你可以先考虑一下|nǐ kěyǐ xiān kǎolǜ yíxià|kamu bisa pikirkan dulu;这完全取决于你|zhè wánquán qǔjué yú nǐ|itu sepenuhnya tergantung kamu"]
+  ]
+ ]},
+ en:{n:"Inggris",l:"en-US",t:[
+  [
+   ["Sapaan","Hello||halo;Thank you||terima kasih;Sorry||maaf;Please||tolong, silakan;Goodbye||sampai jumpa;Nice to meet you||senang bertemu Anda"],
+   ["Sehari-hari","Where is the office?||di mana kantornya?;How much is it?||berapa harganya?;I need help||saya butuh bantuan;See you tomorrow||sampai jumpa besok;I don't understand||saya tidak mengerti;What time is it?||jam berapa sekarang?"],
+   ["Angka","One||satu;Two||dua;Three||tiga;Four||empat;Five||lima;Ten||sepuluh;One hundred||seratus;One thousand||seribu"],
+   ["Waktu dan hari","Today||hari ini;Tomorrow||besok;Yesterday||kemarin;Now||sekarang;Morning||pagi;Evening||malam;Monday||hari Senin;Weekend||akhir pekan"],
+   ["Orang dan keluarga","I||saya;You||kamu;He||dia (laki-laki);She||dia (perempuan);Friend||teman;Family||keluarga;Teacher||guru;Child||anak"],
+   ["Makanan dan minuman","Water||air;Tea||teh;Coffee||kopi;Rice||nasi;Noodles||mi;Chicken||daging ayam;Fruit||buah;Milk||susu"],
+   ["Kata kerja","Eat||makan;Drink||minum;Go||pergi;Come||datang;See||melihat;Speak||berbicara;Buy||membeli;Have||memiliki"],
+   ["Kata sifat","Big||besar;Small||kecil;Good||baik, bagus;New||baru;Fast||cepat;Expensive||mahal;Cheap||murah;Busy||sibuk"],
+   ["Tempat dan transportasi","Home||rumah;School||sekolah;Company||perusahaan;Shop||toko;Hospital||rumah sakit;Airport||bandara;Taxi||taksi;Subway||kereta bawah tanah"],
+   ["Kantor","Meeting||rapat;Phone||telepon;Computer||komputer;Email||surel;Document||dokumen;Job||pekerjaan;Colleague||rekan kerja;Boss||atasan"]
+  ],
+  [
+   ["Reaksi sehari-hari","Really?||benarkah?;That's awesome||keren sekali;No way||mustahil;Don't worry||jangan khawatir;What's wrong?||ada apa?;No problem||tidak masalah;Be careful||hati-hati"],
+   ["Mengajak dan menolak","Let's go together||ayo pergi bersama;Wait a second||tunggu sebentar;I'll be right there||saya segera sampai;Hurry up||cepatlah;Whatever you like||terserah;Maybe next time||lain kali saja;It's on me||saya yang traktir"],
+   ["Berbelanja","What is this?||ini apa?;Do you have other colors?||ada warna lain?;Can I try it?||boleh dicoba?;Can you make it cheaper?||bisa lebih murah?;I'm just looking||saya hanya melihat-lihat;I'll take this one||saya mau yang ini;Can I pay by card?||bisa bayar pakai kartu?"],
+   ["Ciri-ciri benda","Light||ringan;Heavy||berat;Sturdy||kokoh;Waterproof||tahan air;Easy to use||enak dipakai;Convenient||praktis;Fragile||mudah rusak"],
+   ["Cara pakai","Turn on||menyalakan;Turn off||mematikan;Press once||tekan sekali;Charge||mengisi daya;Plug in||mencolokkan;Tighten||mengencangkan;Take it slow||pelan-pelan saja"],
+   ["Perasaan dan pendapat","I think||menurut saya;I like it||saya suka;I don't like it||saya tidak suka;A bit expensive||agak mahal;That's interesting||menarik sekali;I'm a little tired||saya agak capek;I agree||saya setuju"]
+  ],
+  [
+   ["Menjelaskan produk","This is used for cooking rice||ini dipakai untuk memasak nasi;The battery lasts all day||baterainya tahan seharian;It's lighter and thinner than the old model||lebih ringan dan tipis dari model lama;It's made of stainless steel||dibuat dari baja tahan karat;You only need to press once||cukup tekan sekali saja;It comes with a one-year warranty||garansinya satu tahun;It's perfect for beginners||sangat cocok untuk pemula"],
+   ["Menjelaskan sesuatu","Simply put||singkatnya;For example||misalnya;In other words||dengan kata lain;Here's the reason||alasannya begini;First, we need to check||pertama, kita harus periksa dulu;That's why||itulah sebabnya;Do you see what I mean?||apakah kamu mengerti maksudku?"],
+   ["Seperti di film","Are you kidding me?||kamu bercanda, ya?;I've had enough||saya sudah muak;We have to get out of here||kita harus pergi dari sini;Trust me||percayalah padaku;I have a bad feeling||perasaanku tidak enak;It's not your fault||ini bukan salahmu;I'm never coming back||aku tidak akan kembali lagi"],
+   ["Bercerita dan mengeluh","Guess what?||coba tebak apa?;I found out later||belakangan baru ketahuan;The result was totally different||hasilnya benar-benar beda;I almost forgot||saya hampir lupa;I never expected this||tak disangka jadi begini;It's a long story||ceritanya panjang;Don't even ask||jangan ditanya"],
+   ["Membandingkan dan meyakinkan","This one is better value than that one||ini lebih hemat daripada itu;It's expensive, but it lasts||meski mahal, tapi awet;It's worth a try||layak dicoba;I promise you'll love it||saya jamin kamu akan suka;I'm not bragging||bukan membual;You can think about it first||kamu bisa pikirkan dulu;It's completely up to you||itu sepenuhnya tergantung kamu"]
+  ]
+ ]}
+};
+const TN=["Dasar","Menengah","Mahir"],PASS=80,EXP=80,TY=["read","mc","write","speak"];
+let lang="zh",S={},Q,k,sc,ctx,A;
+try{S=JSON.parse(localStorage.getItem("dwi")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("dwi",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),app=$("#app"),C=()=>D[lang],P=()=>(S[lang]=S[lang]||{p:{},x:{}});
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\u4e00-\u9fff]/g,"");
+function lv(){let id=0,o=[];C().t.forEach((t,ti)=>t.forEach(([name,s],li)=>{id++;o.push({id,ti,li,name,n:Math.min(6+2*id,30),it:s.split(";").map(x=>{const[w,r,m]=x.split("|");return{w,r,m}})})}));return o}
+const all=()=>lv().flatMap(l=>l.it);
+const lvOpen=l=>l.id==1||(p=>p.ti!=l.ti?(P().x[p.ti]||0)>=EXP:(P().p[p.id]||0)>=PASS)(lv().find(z=>z.id==l.id-1));
+const exOpen=ti=>lv().filter(l=>l.ti==ti).every(l=>(P().p[l.id]||0)>=PASS);
+function sp(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=C().l;u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function setL(c){lang=c;document.body.className=c;home()}
+function home(){
+ const Ls=lv(),p=P();
+ let h=`<h1>Dwibahasa</h1><p class=mut>Mandarin dan Inggris untuk percakapan sehari-hari, film, dan cara menjelaskan sesuatu. Lulus level dulu, baru naik tingkat.</p><div class=tabs>${Object.keys(D).map(c=>`<button class="tab ${c==lang?"on":""}" onclick="setL('${c}')">${D[c].n}</button>`).join("")}</div>`;
+ TN.forEach((tn,ti)=>{
+  const open=ti==0||(p.x[ti-1]||0)>=EXP,ex=p.x[ti]||0;
+  h+=`<section class="t ${open?"":"lock"}"><h2>${tn} <small>${Ls.filter(l=>l.ti==ti).reduce((a,l)=>a+l.it.length,0)} kosakata</small> ${open?"":"🔒"}</h2>`;
+  Ls.filter(l=>l.ti==ti).forEach(l=>{const s=p.p[l.id]||0,o=lvOpen(l);h+=`<button class=row ${o?"":"disabled"} onclick="lvScreen(${l.id})"><span>Level ${l.id}: ${l.name}<br><small>${l.n} soal ujian</small></span><span>${s>=PASS?"✓ "+s+"%":o?"Mulai":"🔒"}</span></button>`});
+  h+=`<button class="row x" ${exOpen(ti)?"":"disabled"} onclick="exam(${ti})"><span>Ujian akhir ${tn}<br><small>40 soal dari seluruh materi ${tn}, lulus ${EXP}%</small></span><span>${ex>=EXP?"✓ "+ex+"%":exOpen(ti)?"Mulai":"🔒"}</span></button></section>`;
+ });
+ app.innerHTML=h;
+}
+function lvScreen(id){
+ const l=lv().find(z=>z.id==id);
+ app.innerHTML=`<button class=sm onclick="home()">Kembali</button><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
+}
+const mk=(it,n,ty=TY)=>{let a=[],q=[];for(let i=0;i<n;i++){if(i%it.length==0)a=shuf(it);q.push({it:a[i%it.length],ty:ty[i%ty.length]})}return q};
+function drill(id,t){const l=lv().find(z=>z.id==id);run(mk(l.it,5,[t]),{kind:"dr",t:0,back:`lvScreen(${id})`})}
+function quiz(id){const Ls=lv(),l=Ls.find(z=>z.id==id);run(mk(Ls.filter(z=>z.ti==l.ti&&z.li<=l.li).flatMap(z=>z.it),l.n),{kind:"lv",id,t:PASS,back:`lvScreen(${id})`})}
+function exam(ti){run(mk(lv().filter(z=>z.ti==ti).flatMap(z=>z.it),40),{kind:"ex",id:ti,t:EXP,back:"home()"})}
+function run(q,c){Q=q;ctx=c;k=0;sc=0;ask()}
+function ask(){
+ if(k>=Q.length)return fin();
+ const{w,r,m}=Q[k].it,ty=Q[k].ty,zh=lang=="zh";
+ A=zh?`${w} (${r}) = ${m}`:`${w} = ${m}`;
+ const o=()=>{const a=shuf(all().filter(x=>x.w!=w)).sort((p,q)=>Math.abs(p.w.length-w.length)-Math.abs(q.w.length-w.length)).slice(0,3);a.push(Q[k].it);return shuf(a)};
+ let b="";
+ if(ty=="read")b=`<p>Baca, lalu pilih artinya</p><div class=big>${w}</div><button class=sm onclick="sp(Q[k].it.w)">🔊 Dengar</button>${o().map(x=>`<button class=opt data-k="${x.w==w?1:0}" onclick="pick(this)">${x.m}</button>`).join("")}`;
+ else if(ty=="mc")b=`<p>Pilih terjemahan yang tepat</p><div class=big>${m}</div>${o().map(x=>`<button class=opt data-k="${x.w==w?1:0}" onclick="pick(this)"><span>${x.w}</span><small>${x.r}</small></button>`).join("")}`;
+ else if(ty=="write")b=`<p>Tulis dalam ${zh?"hanzi atau pinyin":"bahasa Inggris"}</p><div class=big>${m}</div><input id=ans autocomplete=off autocapitalize=off><button class=btn onclick="chk()">Periksa</button>`;
+ else b=`<p>Ucapkan dengan lantang</p><div class=big>${w}</div><small>${r}</small><p class=mut>${m}</p><button class=sm onclick="sp(Q[k].it.w)">🔊 Dengar</button> <button class=btn onclick="mic(this)">🎤 Ucapkan</button>`;
+ app.innerHTML=`<button class=sm onclick="${ctx.back}">Keluar</button> <span class=mut>Soal ${k+1} dari ${Q.length}</span><div class=q>${b}<div id=fb></div></div>`;
+}
+function pick(b){const ok=b.dataset.k=="1";document.querySelectorAll(".opt").forEach(x=>{if(x.dataset.k=="1")x.classList.add("ok")});if(!ok)b.classList.add("bad");fb(ok)}
+function chk(){const{w,r}=Q[k].it,i=$("#ans"),v=norm(i.value);i.disabled=true;fb(!!v&&(v==norm(w)||(!!r&&v==norm(r))))}
+function mic(b){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition,{w,r}=Q[k].it;
+ const man=()=>{b.outerHTML=`<button class=btn onclick="fb(true)">Sudah saya ucapkan ✓</button>`};
+ if(!SR)return man();
+ try{const s=new SR();s.lang=C().l;b.textContent="🎙️ Mendengarkan…";
+  s.onresult=e=>{const t=e.results[0][0].transcript,n=norm(t);b.remove();fb(n==norm(w)||(!!r&&n==norm(r)),"Terdengar: "+t)};
+  s.onerror=man;s.start()}catch(e){man()}
+}
+function fb(ok,note){
+ if(ok)sc++;
+ document.querySelectorAll(".opt,.btn").forEach(x=>x.disabled=true);
+ $("#fb").innerHTML=`<p class="${ok?"good":"nope"}">${ok?"✓ Benar!":"✗ Belum tepat"}${note?". "+note:""}<br><small>${A}</small></p><button class=btn onclick="k++;ask()">Lanjut</button>`;
+}
+function fin(){
+ const p=Math.round(sc/Q.length*100),ok=p>=ctx.t,o=P();
+ if(ctx.kind!="dr"){const t=ctx.kind=="lv"?o.p:o.x;if(p>(t[ctx.id]||0)){t[ctx.id]=p;save()}}
+ app.innerHTML=`<div class=q><div class=big>${p}%</div><p>${sc} dari ${Q.length} soal benar</p><p class="${ctx.kind=="dr"||ok?"good":"nope"}">${ctx.kind=="dr"?"Latihan selesai. Ulangi sesering mungkin.":ok?"Lulus! Lanjut ke tahap berikutnya.":"Belum lulus, minimal "+ctx.t+"%. Pelajari lagi materinya lalu coba ulang."}</p><button class=btn onclick="${ctx.back}">Kembali</button></div>`;
+}
+home();
+</script>
+</body>
+</html>
