@@ -48,6 +48,10 @@ input{width:100%;padding:.7rem;font:inherit;border:1px solid var(--ln);border-ra
 .cat .big{display:block;margin:0 0 .1rem;font-size:1.7rem}
 .bar{display:block;height:8px;background:var(--ln);border-radius:4px;margin:.7rem 0 .4rem;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--acc)}
+.tb{display:flex;align-items:center;gap:.5rem}
+.sm.th{font-size:1.15rem;padding:.15rem .6rem}
+.lk{background:none;border:0;padding:0;font:inherit;text-decoration:underline;color:var(--mut)}
+label{display:block;margin-bottom:.4rem;font-weight:600}
 </style>
 </head>
 <body class="zh"><main id="app"></main>
@@ -114,8 +118,8 @@ const D={
 };
 const TN=["Dasar","Menengah","Mahir"],PASS=80,EXP=80,TY=["read","mc","write","speak"];
 let lang="zh",S={},Q,k,sc,ctx,A;
-try{S=JSON.parse(localStorage.getItem("dwi")||"{}")}catch(e){}
-const save=()=>{try{localStorage.setItem("dwi",JSON.stringify(S))}catch(e){}};
+let R={u:[],cur:-1};try{const x=JSON.parse(localStorage.getItem("dwi2")||"null");if(x&&Array.isArray(x.u))R=x}catch(e){}S=(R.u[R.cur]||{}).d||{};
+const save=()=>{try{localStorage.setItem("dwi2",JSON.stringify(R))}catch(e){}};
 const $=s=>document.querySelector(s),app=$("#app"),C=()=>D[lang],P=()=>(S[lang]=S[lang]||{p:{},x:{}});
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
 const norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\u4e00-\u9fff]/g,"");
@@ -129,16 +133,48 @@ const today=()=>dk(new Date()),yest=()=>{const d=new Date();return dk(new Date(d
 function touch(){const t=today();if(S.last==t)return;S.n=S.last==yest()?(S.n||0)+1:1;S.last=t;save()}
 const streak=()=>S.last==today()||S.last==yest()?(S.n||0):0;
 const cp=c=>{const L=lv(c),d=L.filter(l=>((S[c]||{p:{}}).p[l.id]||0)>=PASS).length;return[d,L.length,Math.round(d/L.length*100)]};
+let loc=["home"];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t=="dark":!!(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)};
+const themeBtn=()=>`<button class="sm th" onclick="toggleTheme(this)" aria-label="Ganti tema gelap atau terang">${isDark()?"☀️":"🌙"}</button>`;
+function toggleTheme(b){const t=isDark()?"light":"dark";document.documentElement.dataset.theme=t;R.theme=t;save();b.textContent=isDark()?"☀️":"🌙"}
+function login(){
+ loc=["login"];
+ const us=R.u.map((u,i)=>`<button class=row onclick="enter(${i})"><span>${esc(u.n)}</span><span>Masuk</span></button>`).join("");
+ app.innerHTML=`<div class=hd><h1>Dwibahasa</h1>${themeBtn()}</div><p class=mut>Belajar Mandarin dan Inggris dari dasar sampai mahir. Tanpa akun dan kata sandi: isi namamu, progresmu tersimpan di perangkat ini.</p><div class=q><label for=nm>Namamu</label><input id=nm maxlength=20 autocomplete=off placeholder="Contoh: Cahaya"><button class=btn onclick="newU()">Mulai belajar</button><div id=er class=nope></div></div>${us?`<h3>Atau lanjutkan sebagai</h3>${us}`:""}`;
+}
+function newU(){
+ const n=$("#nm").value.trim().replace(/\s+/g," ");
+ if(!n){$("#er").textContent="Isi namamu dulu.";return}
+ let i=R.u.findIndex(u=>u.n.toLowerCase()==n.toLowerCase());
+ if(i<0){let d={};if(!R.u.length)try{const o=JSON.parse(localStorage.getItem("dwi")||"null");if(o&&typeof o=="object")d=o}catch(e){}R.u.push({n,d});i=R.u.length-1}
+ enter(i);
+}
+function enter(i){R.cur=i;S=R.u[i].d;save();home()}
+function start(){if(R.theme)document.documentElement.dataset.theme=R.theme;R.cur>=0&&R.u[R.cur]?home():login()}
+const go=s=>{const m=/^(\w+)\((.*)\)$/.exec(s);window[m[1]](m[2]?JSON.parse(m[2]):undefined)};
+function up(){const p=loc[0];
+ if(p=="quiz")go(ctx.back);
+ else if(p=="lvScreen")levels(lv().find(l=>l.id==loc[1]).ti);
+ else if(p=="levels")tiers(lang);
+ else if(p=="tiers")home();
+ else return false;
+ return true}
+let armed=0;
+const arm=()=>{if(armed)return;armed=1;try{if(!(history.state&&history.state.a)){history.replaceState({a:0},"");history.pushState({a:1},"")}}catch(e){}};
+document.addEventListener("click",arm);
+window.addEventListener("popstate",()=>{let r=false;try{r=up()}catch(e){}if(r){try{history.pushState({a:1},"")}catch(e){}}else{try{history.back()}catch(e){}}});
 function home(){
+ loc=["home"];
  const n=streak(),on=S.last==today();
- let h=`<div class=hd><h1>Dwibahasa</h1><div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div><p class=mut>${on?"Hari ini sudah belajar. Apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."}</p>`;
+ let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."} <button class=lk onclick="login()">Ganti pengguna</button></p>`;
  Object.keys(D).forEach(c=>{const[d,t,p]=cp(c);h+=`<button class="cat ${c}" onclick="tiers('${c}')"><span class=big>${c=="zh"?"中文":"English"}</span><span>${D[c].n}</span><span class=bar><i style="width:${p}%"></i></span><small>${p}% selesai, ${d} dari ${t} level</small></button>`});
  app.innerHTML=h;
 }
 function tiers(c){
- lang=c;document.body.className=c;
+ loc=["tiers"];lang=c;document.body.className=c;
  const L=lv(),p=P();
- let h=`<button class=sm onclick="home()">Kembali</button><h2 style="margin-top:1rem">${D[c].n}</h2><p class=mut>Pilih tingkat belajarmu.</p>`;
+ let h=`<div class=hd><button class=sm onclick="home()">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">${D[c].n}</h2><p class=mut>Pilih tingkat belajarmu.</p>`;
  TN.forEach((tn,ti)=>{
   const ls=L.filter(l=>l.ti==ti),d=ls.filter(l=>(p.p[l.id]||0)>=PASS).length,pc=Math.round(d/ls.length*100),open=ti==0||(p.x[ti-1]||0)>=EXP;
   h+=`<button class=cat ${open?"":"disabled"} onclick="levels(${ti})"><span class=big>${tn} ${open?"":"🔒"}</span><span class=bar><i style="width:${pc}%"></i></span><small>${open?pc+"% selesai, "+d+" dari "+ls.length+" level":"Lulus ujian akhir "+TN[ti-1]+" untuk membuka"}</small></button>`;
@@ -146,21 +182,22 @@ function tiers(c){
  app.innerHTML=h;
 }
 function levels(ti){
+ loc=["levels",ti];
  const L=lv().filter(l=>l.ti==ti),p=P(),tn=TN[ti],ex=p.x[ti]||0;
- let h=`<button class=sm onclick="tiers(lang)">Kembali</button><h2 style="margin-top:1rem">${D[lang].n}: ${tn}</h2>`;
+ let h=`<div class=hd><button class=sm onclick="tiers('${lang}')">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">${D[lang].n}: ${tn}</h2>`;
  L.forEach(l=>{const s=p.p[l.id]||0,o=lvOpen(l);h+=`<button class=row ${o?"":"disabled"} onclick="lvScreen(${l.id})"><span>Level ${l.id}: ${l.name}<br><small>${l.n} soal ujian</small></span><span>${s>=PASS?"✓ "+s+"%":o?"Mulai":"🔒"}</span></button>`});
  h+=`<button class="row x" ${exOpen(ti)?"":"disabled"} onclick="exam(${ti})"><span>Ujian akhir ${tn}<br><small>40 soal dari seluruh materi ${tn}, lulus ${EXP}%</small></span><span>${ex>=EXP?"✓ "+ex+"%":exOpen(ti)?"Mulai":"🔒"}</span></button>`;
  app.innerHTML=h;
 }
-function lvScreen(id){
+function lvScreen(id){loc=["lvScreen",id];
  const l=lv().find(z=>z.id==id);
- app.innerHTML=`<button class=sm onclick="levels(${l.ti})">Kembali</button><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
+ app.innerHTML=`<div class=hd><button class=sm onclick="levels(${l.ti})">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
 }
 const mk=(it,n,ty=TY)=>{let a=[],q=[];for(let i=0;i<n;i++){if(i%it.length==0)a=shuf(it);q.push({it:a[i%it.length],ty:ty[i%ty.length]})}return q};
 function drill(id,t){const l=lv().find(z=>z.id==id);run(mk(l.it,5,[t]),{kind:"dr",t:0,back:`lvScreen(${id})`})}
 function quiz(id){const Ls=lv(),l=Ls.find(z=>z.id==id);run(mk(Ls.filter(z=>z.ti==l.ti&&z.li<=l.li).flatMap(z=>z.it),l.n),{kind:"lv",id,t:PASS,back:`lvScreen(${id})`})}
 function exam(ti){run(mk(lv().filter(z=>z.ti==ti).flatMap(z=>z.it),40),{kind:"ex",id:ti,t:EXP,back:`levels(${ti})`})}
-function run(q,c){Q=q;ctx=c;k=0;sc=0;ask()}
+function run(q,c){loc=["quiz"];Q=q;ctx=c;k=0;sc=0;ask()}
 function ask(){
  if(k>=Q.length)return fin();
  const{w,r,m}=Q[k].it,ty=Q[k].ty,zh=lang=="zh";
@@ -193,7 +230,7 @@ function fin(){
  if(ctx.kind!="dr"){const t=ctx.kind=="lv"?o.p:o.x;if(p>(t[ctx.id]||0)){t[ctx.id]=p;save()}}
  app.innerHTML=`<div class=q><div class=big>${p}%</div><p>${sc} dari ${Q.length} soal benar</p><p class="${ctx.kind=="dr"||ok?"good":"nope"}">${ctx.kind=="dr"?"Latihan selesai. Ulangi sesering mungkin.":ok?"Lulus! Lanjut ke tahap berikutnya.":"Belum lulus, minimal "+ctx.t+"%. Pelajari lagi materinya lalu coba ulang."}</p><button class=btn onclick="${ctx.back}">Kembali</button></div>`;
 }
-home();
+start();
 </script>
 </body>
 </html>

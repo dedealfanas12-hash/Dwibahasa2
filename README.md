@@ -11,7 +11,8 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 - Ujian akhir 40 soal untuk tiap tingkat sebelum tingkat berikutnya terbuka
 - Dashboard bersih: pilih Mandarin atau Inggris, lalu tingkat, lalu level
 - Progres belajar per bahasa (persen level yang sudah lulus) dan streak 🔥 yang bertambah tiap hari ada soal yang dijawab
-- Progres dan streak tersimpan di browser (localStorage), jadi terpisah per perangkat
+- Masuk tanpa akun: cukup isi nama, dan tiap pengguna punya progres serta streak sendiri. Data tersimpan di browser (localStorage), jadi terpisah per perangkat
+- Mode gelap dan terang lewat tombol di pojok kanan atas (pilihan tersimpan)
 
 ## Online lewat GitHub Pages
 
