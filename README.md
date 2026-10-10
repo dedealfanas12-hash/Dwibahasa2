@@ -13,6 +13,7 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 - Progres belajar per bahasa (persen level yang sudah lulus) dan streak 🔥 yang bertambah tiap hari ada soal yang dijawab
 - Masuk tanpa akun: cukup isi nama, dan tiap pengguna punya progres serta streak sendiri. Data tersimpan di browser (localStorage), jadi terpisah per perangkat
 - Mode gelap dan terang lewat tombol di pojok kanan atas (pilihan tersimpan)
+- Efek suara: nada lonceng yang makin tinggi untuk jawaban benar beruntun, nada rendah lembut untuk jawaban salah, fanfare saat lulus, dan nada turun saat gagal (bisa dimatikan dengan tombol 🔊 di pojok kanan atas)
 
 ## Online lewat GitHub Pages
 

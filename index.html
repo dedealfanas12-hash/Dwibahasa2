@@ -133,10 +133,56 @@ const today=()=>dk(new Date()),yest=()=>{const d=new Date();return dk(new Date(d
 function touch(){const t=today();if(S.last==t)return;S.n=S.last==yest()?(S.n||0)+1:1;S.last=t;save()}
 const streak=()=>S.last==today()||S.last==yest()?(S.n||0):0;
 const cp=c=>{const L=lv(c),d=L.filter(l=>((S[c]||{p:{}}).p[l.id]||0)>=PASS).length;return[d,L.length,Math.round(d/L.length*100)]};
+let AC,OUT,cmb=0;
+const SC=[0,2,4,5,7,9,11,12];
+function ac(){
+ if(!AC){
+  AC=new(window.AudioContext||window.webkitAudioContext)();
+  OUT=AC.createGain();OUT.gain.value=.8;
+  const dl=AC.createDelay(),fk=AC.createGain(),wt=AC.createGain();
+  dl.delayTime.value=.14;fk.gain.value=.3;wt.gain.value=.28;
+  OUT.connect(AC.destination);OUT.connect(dl);dl.connect(fk);fk.connect(dl);dl.connect(wt);wt.connect(AC.destination);
+ }
+ if(AC.state=="suspended")AC.resume();
+}
+const PT={bell:[[1,1,1],[2,.4,.6],[3,.2,.4],[4.2,.12,.3]],soft:[[1,1,1],[2,.3,.6],[3,.1,.4]]};
+function nt(f,d,l,k,b,v){
+ const s=AC.currentTime+d;
+ PT[k].forEach(([m,g,dc])=>{
+  const o=AC.createOscillator(),e=AC.createGain(),L=l*dc;
+  o.type="sine";o.frequency.setValueAtTime(f*m,s);
+  if(b)o.frequency.exponentialRampToValueAtTime(f*m*b,s+L);
+  e.gain.setValueAtTime(.0001,s);e.gain.exponentialRampToValueAtTime(.3*g*(v||1),s+.008);e.gain.exponentialRampToValueAtTime(.0001,s+L);
+  o.connect(e);e.connect(OUT);o.start(s);o.stop(s+L+.05);
+ });
+}
+function bz(f,d,l,b){
+ const s=AC.currentTime+d,o=AC.createOscillator(),e=AC.createGain(),lp=AC.createBiquadFilter();
+ o.type="sawtooth";o.frequency.setValueAtTime(f,s);o.frequency.exponentialRampToValueAtTime(f*b,s+l);
+ lp.type="lowpass";lp.frequency.setValueAtTime(1500,s);lp.frequency.exponentialRampToValueAtTime(450,s+l);
+ e.gain.setValueAtTime(.0001,s);e.gain.exponentialRampToValueAtTime(.4,s+.015);e.gain.exponentialRampToValueAtTime(.0001,s+l);
+ o.connect(lp);lp.connect(e);e.connect(OUT);o.start(s);o.stop(s+l+.05);
+}
+function snd(t){
+ if(R.mute)return;
+ try{
+  ac();
+  if(t=="ok"||t=="demo"){const m=Math.pow(2,SC[Math.min(cmb,7)]/12);if(t=="ok")cmb++;nt(784*m,0,.4,"bell");nt(1047*m,.09,.8,"bell")}
+  else if(t=="no"){cmb=0;bz(330,0,.2,.92);bz(262,.17,.45,.8)}
+  else if(t=="win"){
+   [[523,0],[659,.09],[784,.18],[1047,.27],[1319,.4]].forEach(([f,d])=>nt(f,d,.45,"bell"));
+   [1047,1319,1568,2093].forEach(f=>nt(f,.62,1.4,"bell",0,.6));
+   nt(2637,.78,.6,"bell",0,.5);nt(3136,.88,.6,"bell",0,.5);
+  }else{[[392,0],[370,.3],[349,.6]].forEach(([f,d])=>bz(f,d,.28,.97));bz(330,.9,.9,.82)}
+ }catch(e){}
+}
+document.addEventListener("click",()=>{try{ac()}catch(e){}},{once:true});
 let loc=["home"];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t=="dark":!!(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)};
-const themeBtn=()=>`<button class="sm th" onclick="toggleTheme(this)" aria-label="Ganti tema gelap atau terang">${isDark()?"☀️":"🌙"}</button>`;
+const themeBtn0=()=>`<button class="sm th" onclick="toggleTheme(this)" aria-label="Ganti tema gelap atau terang">${isDark()?"☀️":"🌙"}</button>`;
+const themeBtn=()=>`<span class=tb><button class="sm th" onclick="toggleSnd(this)" aria-label="Suara hidup atau mati">${R.mute?"🔇":"🔊"}</button>${themeBtn0()}</span>`;
+function toggleSnd(b){R.mute=!R.mute;save();b.textContent=R.mute?"🔇":"🔊";snd("demo")}
 function toggleTheme(b){const t=isDark()?"light":"dark";document.documentElement.dataset.theme=t;R.theme=t;save();b.textContent=isDark()?"☀️":"🌙"}
 function login(){
  loc=["login"];
@@ -197,7 +243,7 @@ const mk=(it,n,ty=TY)=>{let a=[],q=[];for(let i=0;i<n;i++){if(i%it.length==0)a=s
 function drill(id,t){const l=lv().find(z=>z.id==id);run(mk(l.it,5,[t]),{kind:"dr",t:0,back:`lvScreen(${id})`})}
 function quiz(id){const Ls=lv(),l=Ls.find(z=>z.id==id);run(mk(Ls.filter(z=>z.ti==l.ti&&z.li<=l.li).flatMap(z=>z.it),l.n),{kind:"lv",id,t:PASS,back:`lvScreen(${id})`})}
 function exam(ti){run(mk(lv().filter(z=>z.ti==ti).flatMap(z=>z.it),40),{kind:"ex",id:ti,t:EXP,back:`levels(${ti})`})}
-function run(q,c){loc=["quiz"];Q=q;ctx=c;k=0;sc=0;ask()}
+function run(q,c){loc=["quiz"];cmb=0;Q=q;ctx=c;k=0;sc=0;ask()}
 function ask(){
  if(k>=Q.length)return fin();
  const{w,r,m}=Q[k].it,ty=Q[k].ty,zh=lang=="zh";
@@ -220,13 +266,13 @@ function mic(b){
   s.onresult=e=>{const t=e.results[0][0].transcript,n=norm(t);b.remove();fb(n==norm(w)||(!!r&&n==norm(r)),"Terdengar: "+t)};
   s.onerror=man;s.start()}catch(e){man()}
 }
-function fb(ok,note){touch();
+function fb(ok,note){touch();snd(ok?"ok":"no");
  if(ok)sc++;
  document.querySelectorAll(".opt,.btn").forEach(x=>x.disabled=true);
  $("#fb").innerHTML=`<p class="${ok?"good":"nope"}">${ok?"✓ Benar!":"✗ Belum tepat"}${note?". "+note:""}<br><small>${A}</small></p><button class=btn onclick="k++;ask()">Lanjut</button>`;
 }
 function fin(){
- const p=Math.round(sc/Q.length*100),ok=p>=ctx.t,o=P();
+ const p=Math.round(sc/Q.length*100),ok=p>=ctx.t,o=P();snd((ctx.kind=="dr"?p>=PASS:ok)?"win":"lose");
  if(ctx.kind!="dr"){const t=ctx.kind=="lv"?o.p:o.x;if(p>(t[ctx.id]||0)){t[ctx.id]=p;save()}}
  app.innerHTML=`<div class=q><div class=big>${p}%</div><p>${sc} dari ${Q.length} soal benar</p><p class="${ctx.kind=="dr"||ok?"good":"nope"}">${ctx.kind=="dr"?"Latihan selesai. Ulangi sesering mungkin.":ok?"Lulus! Lanjut ke tahap berikutnya.":"Belum lulus, minimal "+ctx.t+"%. Pelajari lagi materinya lalu coba ulang."}</p><button class=btn onclick="${ctx.back}">Kembali</button></div>`;
 }
