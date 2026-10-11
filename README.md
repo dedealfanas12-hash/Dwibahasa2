@@ -18,11 +18,20 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 ## Online lewat GitHub Pages
 
 1. Buat repo baru di GitHub (Public), misalnya `dwibahasa`.
-2. Upload `index.html` dan `README.md` (Add file, Upload files, Commit changes).
+2. Upload semua file di folder ini ke repo: `index.html`, `manifest.json`, `sw.js`, tiga file ikon `.png`, dan `README.md` (Add file, Upload files, Commit changes).
 3. Buka Settings, Pages. Pada Source pilih **Deploy from a branch**, Branch `main`, folder `/ (root)`, lalu Save.
 4. Tunggu sekitar 1 menit. Alamatnya: `https://USERNAME.github.io/dwibahasa/`
 
 Netlify juga bisa: hubungkan repo ini, kosongkan build command, dan isi publish directory dengan `/`.
+
+## Pasang di HP
+
+Setelah online lewat GitHub Pages, buka alamatnya (https) di HP:
+
+- Android (Chrome): tekan tombol "Instal aplikasi di perangkat ini" di dashboard, atau menu ⋮ lalu "Instal aplikasi" / "Tambahkan ke layar utama".
+- iPhone (Safari): tombol Bagikan, lalu "Tambah ke Layar Utama". Di iPhone, data aplikasi yang sudah diinstal terpisah dari data di Safari.
+
+File `index.html` yang dibuka langsung dari HP, atau link pratinjau di Claude, tidak bisa diinstal. Syaratnya: file `manifest.json`, `sw.js`, dan ikon harus berada di folder yang sama dengan `index.html`.
 
 ## Mengubah kosakata
 

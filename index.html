@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dwibahasa: Belajar Mandarin dan Inggris</title>
 <meta name="description" content="Belajar Mandarin dan Inggris dari dasar sampai mahir">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14213d">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dwibahasa">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌏</text></svg>">
 <style>
 :root{--bg:#f2f4f8;--cd:#fff;--ink:#14213d;--mut:#5b6678;--ln:#d6dbe5;--ok:#15803d;--bad:#b91c1c;--zh:#b4232a;--en:#1e56c8;--oa:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -213,7 +219,7 @@ window.addEventListener("popstate",()=>{let r=false;try{r=up()}catch(e){}if(r){t
 function home(){
  loc=["home"];
  const n=streak(),on=S.last==today();
- let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."} <button class=lk onclick="login()">Ganti pengguna</button></p>`;
+ let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."} <button class=lk onclick="login()">Ganti pengguna</button></p>${ip?'<button class=btn onclick="inst()">Instal aplikasi di perangkat ini</button>':""}`;
  Object.keys(D).forEach(c=>{const[d,t,p]=cp(c);h+=`<button class="cat ${c}" onclick="tiers('${c}')"><span class=big>${c=="zh"?"中文":"English"}</span><span>${D[c].n}</span><span class=bar><i style="width:${p}%"></i></span><small>${p}% selesai, ${d} dari ${t} level</small></button>`});
  app.innerHTML=h;
 }
@@ -276,7 +282,12 @@ function fin(){
  if(ctx.kind!="dr"){const t=ctx.kind=="lv"?o.p:o.x;if(p>(t[ctx.id]||0)){t[ctx.id]=p;save()}}
  app.innerHTML=`<div class=q><div class=big>${p}%</div><p>${sc} dari ${Q.length} soal benar</p><p class="${ctx.kind=="dr"||ok?"good":"nope"}">${ctx.kind=="dr"?"Latihan selesai. Ulangi sesering mungkin.":ok?"Lulus! Lanjut ke tahap berikutnya.":"Belum lulus, minimal "+ctx.t+"%. Pelajari lagi materinya lalu coba ulang."}</p><button class=btn onclick="${ctx.back}">Kembali</button></div>`;
 }
+let ip=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;if(loc[0]=="home")home()});
+addEventListener("appinstalled",()=>{ip=null;if(loc[0]=="home")home()});
+function inst(){if(!ip)return;ip.prompt();ip.userChoice.finally(()=>{ip=null;if(loc[0]=="home")home()})}
 start();
+try{if(navigator.serviceWorker&&/^https?:/.test(location.protocol))addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})})}catch(e){}
 </script>
 </body>
 </html>
