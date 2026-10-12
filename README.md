@@ -11,7 +11,7 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 - Ujian akhir 40 soal untuk tiap tingkat sebelum tingkat berikutnya terbuka
 - Dashboard bersih: pilih Mandarin atau Inggris, lalu tingkat, lalu level
 - Progres belajar per bahasa (persen level yang sudah lulus) dan streak 🔥 yang bertambah tiap hari ada soal yang dijawab
-- Masuk tanpa akun: cukup isi nama, dan tiap pengguna punya progres serta streak sendiri. Data tersimpan di browser (localStorage), jadi terpisah per perangkat
+- Masuk tanpa akun: cukup isi nama, dan tiap pengguna punya progres serta streak sendiri. Tanpa pengaturan tambahan, data tersimpan di browser (localStorage) dan terpisah per perangkat; dengan Firebase (bagian "Akun online"), akun tersimpan online dan semua pengguna bisa saling melihat progres
 - Mode gelap dan terang lewat tombol di pojok kanan atas (pilihan tersimpan)
 - Efek suara: nada lonceng yang makin tinggi untuk jawaban benar beruntun, nada rendah lembut untuk jawaban salah, fanfare saat lulus, dan nada turun saat gagal (bisa dimatikan dengan tombol 🔊 di pojok kanan atas)
 
@@ -23,6 +23,26 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 4. Tunggu sekitar 1 menit. Alamatnya: `https://USERNAME.github.io/dwibahasa/`
 
 Netlify juga bisa: hubungkan repo ini, kosongkan build command, dan isi publish directory dengan `/`.
+
+## Akun online (semua orang bisa saling melihat progres)
+
+Secara bawaan data hanya tersimpan di browser masing-masing. Agar akun bisa dibuka dari perangkat mana pun dan progres bisa dilihat semua orang, aplikasi memakai Firebase Realtime Database (gratis untuk pemakaian kecil, tanpa server sendiri).
+
+1. Buka Firebase Console, pilih proyek (proyek yang sudah ada boleh dipakai lagi) atau buat proyek baru.
+2. Build, Realtime Database, Create Database. Salin URL database, misalnya `https://nama-proyek-default-rtdb.asia-southeast1.firebasedatabase.app`.
+3. Di tab Rules, tambahkan blok `dwibahasa` (jika sudah ada rules lain, cukup tambahkan blok ini di dalam `rules`), lalu Publish:
+
+        {
+          "rules": {
+            "dwibahasa": { ".read": true, ".write": true }
+          }
+        }
+
+4. Di `index.html`, cari baris `const DB="";` (baris pertama di dalam script), isi dengan URL tadi (tanpa garis miring di akhir), lalu commit.
+
+Setelah itu layar login menampilkan daftar "Semua pengguna", dan dashboard punya tombol "Lihat progres pengguna lain". Data disimpan di jalur `/dwibahasa`, jadi tidak bercampur dengan data lain di database yang sama.
+
+Catatan: akun bersifat publik dan tanpa kata sandi. Siapa pun bisa membuka dan mengubah progres akun mana pun, dan siapa pun yang tahu URL database bisa menulis di jalur `dwibahasa`. Cocok untuk belajar bersama dalam kelompok kecil. Jika perlu pembatasan, tambahkan kata sandi atau PIN per akun.
 
 ## Pasang di HP
 

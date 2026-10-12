@@ -58,10 +58,14 @@ input{width:100%;padding:.7rem;font:inherit;border:1px solid var(--ln);border-ra
 .sm.th{font-size:1.15rem;padding:.15rem .6rem}
 .lk{background:none;border:0;padding:0;font:inherit;text-decoration:underline;color:var(--mut)}
 label{display:block;margin-bottom:.4rem;font-weight:600}
+.ur{border:1px solid var(--ln);border-radius:8px;background:var(--cd);padding:.7rem .8rem;margin:.4rem 0}
+.ur .bar{margin:.2rem 0 .5rem}
 </style>
 </head>
 <body class="zh"><main id="app"></main>
 <script>
+const DB="";/* Isi dengan URL Firebase Realtime Database agar akun tersimpan online dan bisa dilihat semua orang. Contoh: "https://nama-proyek-default-rtdb.firebaseio.com". Kosongkan = mode lokal. */
+const CLOUD=!!DB;
 const D={
  zh:{n:"Mandarin",l:"zh-CN",t:[
   [
@@ -125,7 +129,7 @@ const D={
 const TN=["Dasar","Menengah","Mahir"],PASS=80,EXP=80,TY=["read","mc","write","speak"];
 let lang="zh",S={},Q,k,sc,ctx,A;
 let R={u:[],cur:-1};try{const x=JSON.parse(localStorage.getItem("dwi2")||"null");if(x&&Array.isArray(x.u))R=x}catch(e){}S=(R.u[R.cur]||{}).d||{};
-const save=()=>{try{localStorage.setItem("dwi2",JSON.stringify(R))}catch(e){}};
+const save=()=>{try{localStorage.setItem("dwi2",JSON.stringify(R))}catch(e){}sync()};
 const $=s=>document.querySelector(s),app=$("#app"),C=()=>D[lang],P=()=>(S[lang]=S[lang]||{p:{},x:{}});
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
 const norm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\u4e00-\u9fff]/g,"");
@@ -136,7 +140,7 @@ const exOpen=ti=>lv().filter(l=>l.ti==ti).every(l=>(P().p[l.id]||0)>=PASS);
 function sp(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=C().l;u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
 const dk=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today=()=>dk(new Date()),yest=()=>{const d=new Date();return dk(new Date(d.getFullYear(),d.getMonth(),d.getDate()-1))};
-function touch(){const t=today();if(S.last==t)return;S.n=S.last==yest()?(S.n||0)+1:1;S.last=t;save()}
+function touch(){S.t=Date.now();const t=today();if(S.last==t)return;S.n=S.last==yest()?(S.n||0)+1:1;S.last=t;save()}
 const streak=()=>S.last==today()||S.last==yest()?(S.n||0):0;
 const cp=c=>{const L=lv(c),d=L.filter(l=>((S[c]||{p:{}}).p[l.id]||0)>=PASS).length;return[d,L.length,Math.round(d/L.length*100)]};
 let AC,OUT,cmb=0;
@@ -190,26 +194,80 @@ const themeBtn0=()=>`<button class="sm th" onclick="toggleTheme(this)" aria-labe
 const themeBtn=()=>`<span class=tb><button class="sm th" onclick="toggleSnd(this)" aria-label="Suara hidup atau mati">${R.mute?"🔇":"🔊"}</button>${themeBtn0()}</span>`;
 function toggleSnd(b){R.mute=!R.mute;save();b.textContent=R.mute?"🔇":"🔊";snd("demo")}
 function toggleTheme(b){const t=isDark()?"light":"dark";document.documentElement.dataset.theme=t;R.theme=t;save();b.textContent=isDark()?"☀️":"🌙"}
+let cs="",CL=[],lj="",tm;
+const hx=s=>[...new TextEncoder().encode(s.toLowerCase())].map(b=>b.toString(16).padStart(2,"0")).join("");
+const cj=async(p,o)=>{const r=await fetch(DB.replace(/\/$/,"")+"/dwibahasa/"+p+".json",o);if(!r.ok)throw new Error(r.status);return r.json()};
+const pc=(d,c)=>{const L=lv(c);return Math.round(L.filter(l=>(((d[c]||{}).p||{})[l.id]||0)>=PASS).length/L.length*100)};
+const sk=d=>d.last==today()||d.last==yest()?(d.n||0):0;
+const snap=u=>({n:u.n,t:u.d.t||0,zh:pc(u.d,"zh"),en:pc(u.d,"en"),st:sk(u.d)});
+const num=v=>Math.max(0,Math.min(100,+v||0));
+function clean(d){d=d||{};const o={n:Math.min(9999,Math.max(0,+d.n||0))|0,last:/^\d{4}-\d\d-\d\d$/.test(d.last)?d.last:"",t:+d.t||0};
+ for(const c in D){const z=d[c]||{};o[c]={p:{},x:{}};for(const k in z.p||{})o[c].p[+k]=num(z.p[k]);for(const k in z.x||{})o[c].x[+k]=num(z.x[k])}
+ return o}
+function sync(){if(!CLOUD)return;clearTimeout(tm);tm=setTimeout(push,1200)}
+async function push(){
+ const u=R.u[R.cur];if(!CLOUD||!u)return;
+ const k=hx(u.n),b=JSON.stringify({n:u.n,d:u.d,t:u.d.t||0}),j=k+b,o=cs;
+ if(j==lj&&cs!="off")return;
+ try{await cj("users/"+k,{method:"PUT",body:b});await cj("index/"+k,{method:"PUT",body:JSON.stringify(snap(u))});lj=j;cs="ok"}catch(e){cs="off"}
+ if(o!=cs&&loc[0]=="home")home();
+}
+async function refresh(){
+ const u=R.u[R.cur];if(!CLOUD||!u)return;
+ try{const c=await cj("users/"+hx(u.n));
+  if(c&&c.d&&(+c.t||0)>(u.d.t||0)){u.d=clean(c.d);S=u.d;save();if(loc[0]=="home")home()}else push()
+ }catch(e){cs="off";if(loc[0]=="home")home()}
+}
+addEventListener("online",()=>{if(CLOUD)push()});
 function login(){
  loc=["login"];
  const us=R.u.map((u,i)=>`<button class=row onclick="enter(${i})"><span>${esc(u.n)}</span><span>Masuk</span></button>`).join("");
- app.innerHTML=`<div class=hd><h1>Dwibahasa</h1>${themeBtn()}</div><p class=mut>Belajar Mandarin dan Inggris dari dasar sampai mahir. Tanpa akun dan kata sandi: isi namamu, progresmu tersimpan di perangkat ini.</p><div class=q><label for=nm>Namamu</label><input id=nm maxlength=20 autocomplete=off placeholder="Contoh: Cahaya"><button class=btn onclick="newU()">Mulai belajar</button><div id=er class=nope></div></div>${us?`<h3>Atau lanjutkan sebagai</h3>${us}`:""}`;
+ app.innerHTML=`<div class=hd><h1>Dwibahasa</h1>${themeBtn()}</div><p class=mut>${CLOUD?"Tanpa kata sandi: isi namamu atau pilih dari daftar. Progres tersimpan online, dan siapa saja bisa melihat serta membuka akun mana pun.":"Belajar Mandarin dan Inggris dari dasar sampai mahir. Tanpa akun dan kata sandi: isi namamu, progresmu tersimpan di perangkat ini."}</p><div class=q><label for=nm>Namamu</label><input id=nm maxlength=20 autocomplete=off placeholder="Contoh: Cahaya"><button class=btn onclick="newU()">Mulai belajar</button><div id=er class=nope></div></div>${us?`<h3>Di perangkat ini</h3>${us}`:""}<div id=cl></div>`;
+ loadCl();
 }
 function newU(){
  const n=$("#nm").value.trim().replace(/\s+/g," ");
  if(!n){$("#er").textContent="Isi namamu dulu.";return}
- let i=R.u.findIndex(u=>u.n.toLowerCase()==n.toLowerCase());
- if(i<0){let d={};if(!R.u.length)try{const o=JSON.parse(localStorage.getItem("dwi")||"null");if(o&&typeof o=="object")d=o}catch(e){}R.u.push({n,d});i=R.u.length-1}
- enter(i);
+ opn(n);
 }
-function enter(i){R.cur=i;S=R.u[i].d;save();home()}
-function start(){if(R.theme)document.documentElement.dataset.theme=R.theme;R.cur>=0&&R.u[R.cur]?home():login()}
+async function opn(n){
+ let i=R.u.findIndex(u=>u.n.toLowerCase()==String(n).toLowerCase());
+ if(CLOUD){
+  $("#er").textContent="Memuat…";
+  try{
+   const c=await cj("users/"+hx(n));
+   if(c&&c.d){const d=clean(c.d);if(i<0){R.u.push({n:String(c.n||n).slice(0,20),d});i=R.u.length-1}else if(d.t>(R.u[i].d.t||0))R.u[i].d=d}
+  }catch(e){cs="off"}
+ }
+ if(i<0){let d={};if(!R.u.length)try{const o=JSON.parse(localStorage.getItem("dwi")||"null");if(o&&typeof o=="object")d=o}catch(e){}R.u.push({n:String(n).slice(0,20),d});i=R.u.length-1}
+ R.cur=i;S=R.u[i].d;save();home();
+ if(CLOUD)push();
+}
+function enter(i){R.cur=i;S=R.u[i].d;save();home();refresh()}
+async function loadCl(){
+ const el=$("#cl");if(!CLOUD||!el)return;
+ el.innerHTML="<p class=mut>Memuat daftar pengguna…</p>";
+ try{CL=Object.values(await cj("index")||{}).filter(u=>u&&typeof u.n=="string").sort((a,b)=>(+b.t||0)-(+a.t||0));cs="ok"}catch(e){cs="off";el.innerHTML="<p class=mut>Daftar online belum bisa dimuat.</p>";return}
+ if(loc[0]!="login")return;
+ el.innerHTML=CL.length?"<h3>Semua pengguna</h3>"+CL.map((u,i)=>`<button class=row onclick="opn(CL[${i}].n)"><span>${esc(u.n.slice(0,20))}<br><small>中文 ${num(u.zh)}%, English ${num(u.en)}%, 🔥 ${+u.st||0}</small></span><span>Masuk</span></button>`).join(""):"";
+}
+async function board(){
+ loc=["board"];
+ const hd=`<div class=hd><button class=sm onclick="home()">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Progres semua pengguna</h2>`;
+ app.innerHTML=hd+"<p class=mut>Memuat…</p>";
+ let L;
+ try{L=CLOUD?Object.values(await cj("index")||{}):R.u.map(snap);if(CLOUD)cs="ok"}catch(e){cs="off";app.innerHTML=hd+"<p class=nope>Belum bisa memuat data online. Coba lagi nanti.</p>";return}
+ L=L.filter(u=>u&&typeof u.n=="string").sort((a,b)=>((+b.zh||0)+(+b.en||0))-((+a.zh||0)+(+a.en||0)));
+ if(loc[0]!="board")return;
+ app.innerHTML=hd+(CLOUD?"":"<p class=mut>Mode lokal: hanya pengguna di perangkat ini.</p>")+(L.map(u=>`<div class=ur><b>${esc(u.n.slice(0,20))}</b> <span class=mut>🔥 ${+u.st||0}</span>${["zh","en"].map(c=>`<div style="--acc:var(--${c})"><small>${c=="zh"?"中文":"English"} ${num(u[c])}%</small><span class=bar><i style="width:${num(u[c])}%"></i></span></div>`).join("")}</div>`).join("")||"<p class=mut>Belum ada pengguna.</p>");
+}
+function start(){if(R.theme)document.documentElement.dataset.theme=R.theme;R.cur>=0&&R.u[R.cur]?(home(),refresh()):login()}
 const go=s=>{const m=/^(\w+)\((.*)\)$/.exec(s);window[m[1]](m[2]?JSON.parse(m[2]):undefined)};
 function up(){const p=loc[0];
  if(p=="quiz")go(ctx.back);
  else if(p=="lvScreen")levels(lv().find(l=>l.id==loc[1]).ti);
  else if(p=="levels")tiers(lang);
- else if(p=="tiers")home();
+ else if(p=="tiers"||p=="board")home();
  else return false;
  return true}
 let armed=0;
@@ -219,7 +277,7 @@ window.addEventListener("popstate",()=>{let r=false;try{r=up()}catch(e){}if(r){t
 function home(){
  loc=["home"];
  const n=streak(),on=S.last==today();
- let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."} <button class=lk onclick="login()">Ganti pengguna</button></p>${ip?'<button class=btn onclick="inst()">Instal aplikasi di perangkat ini</button>':""}`;
+ let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."} <button class=lk onclick="login()">Ganti pengguna</button> <button class=lk onclick="board()">Lihat progres pengguna lain</button></p>${CLOUD?"<small class=mut>"+(cs=="off"?"⚠️ Belum tersinkron, akan dicoba lagi saat online":"☁️ Progresmu tersimpan online")+"</small>":""}${ip?'<button class=btn onclick="inst()">Instal aplikasi di perangkat ini</button>':""}`;
  Object.keys(D).forEach(c=>{const[d,t,p]=cp(c);h+=`<button class="cat ${c}" onclick="tiers('${c}')"><span class=big>${c=="zh"?"中文":"English"}</span><span>${D[c].n}</span><span class=bar><i style="width:${p}%"></i></span><small>${p}% selesai, ${d} dari ${t} level</small></button>`});
  app.innerHTML=h;
 }
