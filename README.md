@@ -5,7 +5,7 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 ## Isi aplikasi
 
 - Dua bahasa: Mandarin (hanzi dan pinyin) dan Inggris
-- Tiga tingkat: Dasar (76 kosakata, 10 level), Menengah (42 kosakata, 6 level), Mahir (35 kosakata, 5 level)
+- Tiga tingkat. Dasar mengikuti modul: Mandarin memakai 15 pelajaran dari daftar kata HSK 1 (149 kata) dan Inggris memakai 21 modul seperti buku les dan sekolah (218 kata). Menengah (percakapan sehari-hari dan gaya film) dan Mahir (menjelaskan produk atau sesuatu) berisi kalimat dan ungkapan
 - Latihan membaca, mengucapkan, menulis, dan pilihan ganda
 - Ujian naik level: 8 soal di level 1, lalu bertambah 2 soal tiap level (maksimal 30), lulus minimal 80%
 - Ujian akhir 40 soal untuk tiap tingkat sebelum tingkat berikutnya terbuka

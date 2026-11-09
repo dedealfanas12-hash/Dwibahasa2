@@ -69,16 +69,21 @@ const CLOUD=!!DB;
 const D={
  zh:{n:"Mandarin",l:"zh-CN",t:[
   [
-   ["Sapaan","你好|nǐ hǎo|halo;谢谢|xièxie|terima kasih;对不起|duìbuqǐ|maaf;请|qǐng|tolong, silakan;再见|zàijiàn|sampai jumpa;是|shì|ya, adalah"],
-   ["Sehari-hari","办公室在哪里|bàngōngshì zài nǎlǐ|di mana kantornya?;多少钱|duōshao qián|berapa harganya?;我需要帮助|wǒ xūyào bāngzhù|saya butuh bantuan;明天见|míngtiān jiàn|sampai jumpa besok;我不明白|wǒ bù míngbai|saya tidak mengerti;很高兴认识你|hěn gāoxìng rènshi nǐ|senang bertemu Anda"],
-   ["Angka","一|yī|satu;二|èr|dua;三|sān|tiga;四|sì|empat;五|wǔ|lima;十|shí|sepuluh;一百|yì bǎi|seratus;一千|yì qiān|seribu"],
-   ["Waktu dan hari","今天|jīntiān|hari ini;明天|míngtiān|besok;昨天|zuótiān|kemarin;现在|xiànzài|sekarang;早上|zǎoshang|pagi;晚上|wǎnshang|malam;星期一|xīngqī yī|hari Senin;周末|zhōumò|akhir pekan"],
-   ["Orang dan keluarga","我|wǒ|saya;你|nǐ|kamu;他|tā|dia (laki-laki);她|tā|dia (perempuan);朋友|péngyou|teman;家人|jiārén|keluarga;老师|lǎoshī|guru;孩子|háizi|anak"],
-   ["Makanan dan minuman","水|shuǐ|air;茶|chá|teh;咖啡|kāfēi|kopi;米饭|mǐfàn|nasi;面条|miàntiáo|mi;鸡肉|jīròu|daging ayam;水果|shuǐguǒ|buah;牛奶|niúnǎi|susu"],
-   ["Kata kerja","吃|chī|makan;喝|hē|minum;去|qù|pergi;来|lái|datang;看|kàn|melihat;说|shuō|berbicara;买|mǎi|membeli;有|yǒu|memiliki"],
-   ["Kata sifat","大|dà|besar;小|xiǎo|kecil;好|hǎo|baik, bagus;新|xīn|baru;快|kuài|cepat;贵|guì|mahal;便宜|piányi|murah;忙|máng|sibuk"],
-   ["Tempat dan transportasi","家|jiā|rumah;学校|xuéxiào|sekolah;公司|gōngsī|perusahaan;商店|shāngdiàn|toko;医院|yīyuàn|rumah sakit;机场|jīchǎng|bandara;出租车|chūzūchē|taksi;地铁|dìtiě|kereta bawah tanah"],
-   ["Kantor","会议|huìyì|rapat;电话|diànhuà|telepon;电脑|diànnǎo|komputer;邮件|yóujiàn|surel;文件|wénjiàn|dokumen;工作|gōngzuò|pekerjaan;同事|tóngshì|rekan kerja;老板|lǎobǎn|atasan"]
+   ["Sapaan","你|nǐ|kamu;好|hǎo|baik, bagus;你好|nǐ hǎo|halo;谢谢|xièxie|terima kasih;不客气|bú kèqi|sama-sama;再见|zàijiàn|sampai jumpa;对不起|duìbuqǐ|maaf;没关系|méi guānxi|tidak apa-apa;请|qǐng|silakan, tolong;喂|wèi|halo (di telepon)"],
+   ["Perkenalan","我|wǒ|saya;他|tā|dia (laki-laki);她|tā|dia (perempuan);我们|wǒmen|kami, kita;叫|jiào|bernama;名字|míngzi|nama;什么|shénme|apa;认识|rènshi|mengenal;高兴|gāoxìng|senang;是|shì|adalah, ya"],
+   ["Keluarga dan orang","爸爸|bàba|ayah;妈妈|māma|ibu;儿子|érzi|anak laki-laki;女儿|nǚ'ér|anak perempuan;朋友|péngyou|teman;老师|lǎoshī|guru;学生|xuésheng|siswa;同学|tóngxué|teman sekelas;先生|xiānsheng|tuan, suami;小姐|xiǎojie|nona"],
+   ["Angka","一|yī|satu;二|èr|dua;三|sān|tiga;四|sì|empat;五|wǔ|lima;六|liù|enam;七|qī|tujuh;八|bā|delapan;九|jiǔ|sembilan;十|shí|sepuluh"],
+   ["Jumlah dan usia","岁|suì|tahun (usia);几|jǐ|berapa (jumlah kecil);多少|duōshao|berapa banyak;个|gè|kata penggolong umum;多|duō|banyak;少|shǎo|kurang, sedikit;大|dà|besar;小|xiǎo|kecil;有|yǒu|punya, ada;没有|méiyǒu|tidak punya, tidak ada"],
+   ["Bahasa dan belajar","会|huì|bisa (kemampuan);说|shuō|berbicara;汉语|Hànyǔ|bahasa Mandarin;读|dú|membaca;写|xiě|menulis;字|zì|huruf, karakter;听|tīng|mendengar;学习|xuéxí|belajar;和|hé|dan;书|shū|buku"],
+   ["Tanggal dan waktu","年|nián|tahun;月|yuè|bulan;星期|xīngqī|minggu;今天|jīntiān|hari ini;明天|míngtiān|besok;昨天|zuótiān|kemarin;现在|xiànzài|sekarang;点|diǎn|jam (pukul);分钟|fēnzhōng|menit;时候|shíhou|waktu"],
+   ["Waktu dan posisi","上午|shàngwǔ|pagi;中午|zhōngwǔ|tengah hari;下午|xiàwǔ|siang, sore;睡觉|shuìjiào|tidur;上|shàng|atas;下|xià|bawah;里|lǐ|di dalam;前面|qiánmiàn|depan;后面|hòumiàn|belakang;在|zài|di, sedang"],
+   ["Makanan dan minuman","吃|chī|makan;喝|hē|minum;茶|chá|teh;水|shuǐ|air;菜|cài|sayur, lauk;米饭|mǐfàn|nasi;水果|shuǐguǒ|buah;苹果|píngguǒ|apel;杯子|bēizi|gelas, cangkir;饭馆|fànguǎn|restoran"],
+   ["Berbelanja","买|mǎi|membeli;钱|qián|uang;块|kuài|yuan;东西|dōngxi|barang;商店|shāngdiàn|toko;衣服|yīfu|pakaian;漂亮|piàoliang|cantik, indah;本|běn|kata penggolong buku;想|xiǎng|ingin;喜欢|xǐhuan|suka"],
+   ["Kerja dan tempat","工作|gōngzuò|bekerja, pekerjaan;医生|yīshēng|dokter;医院|yīyuàn|rumah sakit;学校|xuéxiào|sekolah;家|jiā|rumah, keluarga;北京|Běijīng|Beijing;中国|Zhōngguó|Tiongkok;住|zhù|tinggal;哪|nǎ|yang mana;哪儿|nǎr|di mana"],
+   ["Cuaca dan perasaan","天气|tiānqì|cuaca;下雨|xiàyǔ|hujan turun;冷|lěng|dingin;热|rè|panas;怎么样|zěnmeyàng|bagaimana (keadaan);怎么|zěnme|bagaimana (cara);太|tài|terlalu;很|hěn|sangat;爱|ài|cinta, menyukai;吗|ma|partikel tanya"],
+   ["Aktivitas","看|kàn|melihat;看见|kànjiàn|melihat (tampak);来|lái|datang;去|qù|pergi;回|huí|kembali, pulang;做|zuò|mengerjakan, membuat;打电话|dǎ diànhuà|menelepon;电视|diànshì|televisi;电影|diànyǐng|film;电脑|diànnǎo|komputer"],
+   ["Kendaraan dan benda","出租车|chūzūchē|taksi;飞机|fēijī|pesawat;开|kāi|mengemudi, membuka;坐|zuò|duduk, naik;桌子|zhuōzi|meja;椅子|yǐzi|kursi;狗|gǒu|anjing;谁|shéi|siapa;那|nà|itu;这|zhè|ini"],
+   ["Partikel dan penguat","的|de|partikel kepemilikan;了|le|partikel perubahan atau selesai;呢|ne|partikel tanya lanjutan;都|dōu|semua;能|néng|dapat, mampu;些|xiē|beberapa;一点儿|yìdiǎnr|sedikit saja;人|rén|orang;不|bù|tidak"]
   ],
   [
    ["Reaksi sehari-hari","真的吗|zhēn de ma|benarkah?;太棒了|tài bàng le|keren sekali;不可能|bù kěnéng|mustahil;别担心|bié dānxīn|jangan khawatir;怎么了|zěnme le|ada apa?;没问题|méi wèntí|tidak masalah;小心点|xiǎoxīn diǎn|hati-hati"],
@@ -98,16 +103,27 @@ const D={
  ]},
  en:{n:"Inggris",l:"en-US",t:[
   [
-   ["Sapaan","Hello||halo;Thank you||terima kasih;Sorry||maaf;Please||tolong, silakan;Goodbye||sampai jumpa;Nice to meet you||senang bertemu Anda"],
-   ["Sehari-hari","Where is the office?||di mana kantornya?;How much is it?||berapa harganya?;I need help||saya butuh bantuan;See you tomorrow||sampai jumpa besok;I don't understand||saya tidak mengerti;What time is it?||jam berapa sekarang?"],
-   ["Angka","One||satu;Two||dua;Three||tiga;Four||empat;Five||lima;Ten||sepuluh;One hundred||seratus;One thousand||seribu"],
-   ["Waktu dan hari","Today||hari ini;Tomorrow||besok;Yesterday||kemarin;Now||sekarang;Morning||pagi;Evening||malam;Monday||hari Senin;Weekend||akhir pekan"],
-   ["Orang dan keluarga","I||saya;You||kamu;He||dia (laki-laki);She||dia (perempuan);Friend||teman;Family||keluarga;Teacher||guru;Child||anak"],
-   ["Makanan dan minuman","Water||air;Tea||teh;Coffee||kopi;Rice||nasi;Noodles||mi;Chicken||daging ayam;Fruit||buah;Milk||susu"],
-   ["Kata kerja","Eat||makan;Drink||minum;Go||pergi;Come||datang;See||melihat;Speak||berbicara;Buy||membeli;Have||memiliki"],
-   ["Kata sifat","Big||besar;Small||kecil;Good||baik, bagus;New||baru;Fast||cepat;Expensive||mahal;Cheap||murah;Busy||sibuk"],
-   ["Tempat dan transportasi","Home||rumah;School||sekolah;Company||perusahaan;Shop||toko;Hospital||rumah sakit;Airport||bandara;Taxi||taksi;Subway||kereta bawah tanah"],
-   ["Kantor","Meeting||rapat;Phone||telepon;Computer||komputer;Email||surel;Document||dokumen;Job||pekerjaan;Colleague||rekan kerja;Boss||atasan"]
+   ["Greetings and Introductions","Hello||halo;Good morning||selamat pagi;Good afternoon||selamat siang;Good evening||selamat sore;Good night||selamat tidur;How are you?||apa kabar?;I'm fine, thank you||saya baik, terima kasih;Nice to meet you||senang bertemu denganmu;What's your name?||siapa namamu?;See you later||sampai jumpa lagi"],
+   ["Numbers","One||satu;Two||dua;Three||tiga;Four||empat;Five||lima;Six||enam;Seven||tujuh;Eight||delapan;Nine||sembilan;Ten||sepuluh;Twenty||dua puluh;One hundred||seratus"],
+   ["Days of the Week","Monday||Senin;Tuesday||Selasa;Wednesday||Rabu;Thursday||Kamis;Friday||Jumat;Saturday||Sabtu;Sunday||Minggu;Weekend||akhir pekan"],
+   ["Months of the Year","January||Januari;February||Februari;March||Maret;April||April;May||Mei;June||Juni;July||Juli;August||Agustus;September||September;October||Oktober;November||November;December||Desember"],
+   ["Family","Father||ayah;Mother||ibu;Brother||saudara laki-laki;Sister||saudara perempuan;Grandfather||kakek;Grandmother||nenek;Uncle||paman;Aunt||bibi;Cousin||sepupu;Parents||orang tua"],
+   ["Colors and Shapes","Red||merah;Blue||biru;Green||hijau;Yellow||kuning;Black||hitam;White||putih;Orange||oranye;Pink||merah muda;Brown||cokelat;Circle||lingkaran;Square||persegi"],
+   ["Food and Drinks","Rice||nasi;Bread||roti;Egg||telur;Fish||ikan;Chicken||ayam;Noodles||mi;Water||air putih;Milk||susu;Tea||teh;Coffee||kopi;Juice||jus"],
+   ["Fruits and Vegetables","Apple||apel;Banana||pisang;Mango||mangga;Grape||anggur;Watermelon||semangka;Pineapple||nanas;Carrot||wortel;Potato||kentang;Tomato||tomat;Onion||bawang"],
+   ["Animals","Cat||kucing;Dog||anjing;Bird||burung;Cow||sapi;Horse||kuda;Goat||kambing;Elephant||gajah;Monkey||monyet;Rabbit||kelinci;Duck||bebek"],
+   ["Parts of the Body","Head||kepala;Hair||rambut;Eye||mata;Ear||telinga;Nose||hidung;Mouth||mulut;Hand||tangan;Leg||tungkai;Foot||telapak kaki;Face||wajah"],
+   ["Clothes","Shirt||kemeja;Trousers||celana panjang;Dress||gaun;Skirt||rok;Shoes||sepatu;Socks||kaus kaki;Hat||topi;Jacket||jaket;Uniform||seragam;Glasses||kacamata"],
+   ["School and Classroom","Book||buku;Pen||pulpen;Pencil||pensil;Ruler||penggaris;Eraser||penghapus;Bag||tas;Desk||meja belajar;Chair||kursi;Whiteboard||papan tulis;Classroom||ruang kelas;Teacher||guru;Student||siswa"],
+   ["House and Furniture","House||rumah;Room||ruangan;Kitchen||dapur;Bathroom||kamar mandi;Bedroom||kamar tidur;Table||meja;Bed||tempat tidur;Door||pintu;Window||jendela;Lamp||lampu;Garden||kebun"],
+   ["Daily Activities","Wake up||bangun tidur;Take a bath||mandi;Eat breakfast||sarapan;Go to school||pergi ke sekolah;Study||belajar;Play||bermain;Read||membaca;Write||menulis;Cook||memasak;Sleep||tidur"],
+   ["Time and Routine","What time is it?||jam berapa sekarang?;It's seven o'clock||sekarang pukul tujuh;Morning||pagi;Afternoon||siang;Evening||sore;Night||malam;Today||hari ini;Tomorrow||besok;Yesterday||kemarin;Always||selalu;Never||tidak pernah"],
+   ["Places in Town","School||sekolah;Hospital||rumah sakit;Market||pasar;Bank||bank;Post office||kantor pos;Library||perpustakaan;Park||taman;Restaurant||restoran;Supermarket||supermarket;Bus station||terminal bus"],
+   ["Transport and Directions","Bus||bus;Car||mobil;Motorcycle||sepeda motor;Train||kereta api;Plane||pesawat;Bicycle||sepeda;Turn left||belok kiri;Turn right||belok kanan;Go straight||jalan lurus;Stop here||berhenti di sini"],
+   ["Weather and Seasons","Sunny||cerah;Rainy||hujan;Cloudy||berawan;Windy||berangin;Hot||panas;Cold||dingin;Spring||musim semi;Summer||musim panas;Autumn||musim gugur;Winter||musim dingin"],
+   ["Jobs","Doctor||dokter;Nurse||perawat;Farmer||petani;Driver||sopir;Police officer||polisi;Chef||juru masak;Engineer||insinyur;Pilot||pilot;Dentist||dokter gigi;Singer||penyanyi"],
+   ["Adjectives and Opposites","Tall||tinggi;Short||pendek;Fast||cepat;Slow||lambat;Happy||senang;Sad||sedih;Clean||bersih;Dirty||kotor;Easy||mudah;Difficult||sulit"],
+   ["Question Words and Prepositions","What||apa;Where||di mana;When||kapan;Who||siapa;Why||mengapa;How||bagaimana;In||di dalam;On||di atas;Under||di bawah;Next to||di sebelah"]
   ],
   [
    ["Reaksi sehari-hari","Really?||benarkah?;That's awesome||keren sekali;No way||mustahil;Don't worry||jangan khawatir;What's wrong?||ada apa?;No problem||tidak masalah;Be careful||hati-hati"],
@@ -128,7 +144,7 @@ const D={
 };
 const TN=["Dasar","Menengah","Mahir"],PASS=80,EXP=80,TY=["read","mc","write","speak"];
 let lang="zh",S={},Q,k,sc,ctx,A;
-let R={u:[],cur:-1};try{const x=JSON.parse(localStorage.getItem("dwi2")||"null");if(x&&Array.isArray(x.u))R=x}catch(e){}S=(R.u[R.cur]||{}).d||{};
+let R={u:[],cur:-1};try{const x=JSON.parse(localStorage.getItem("dwi2")||"null");if(x&&Array.isArray(x.u))R=x}catch(e){}const mig=d=>{if(d.v!==2){d.zh={p:{},x:{}};d.en={p:{},x:{}};d.v=2}return d};R.u.forEach(u=>{u.d=mig(u.d||{})});S=(R.u[R.cur]||{}).d||{};
 const save=()=>{try{localStorage.setItem("dwi2",JSON.stringify(R))}catch(e){}sync()};
 const $=s=>document.querySelector(s),app=$("#app"),C=()=>D[lang],P=()=>(S[lang]=S[lang]||{p:{},x:{}});
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
@@ -201,7 +217,7 @@ const pc=(d,c)=>{const L=lv(c);return Math.round(L.filter(l=>(((d[c]||{}).p||{})
 const sk=d=>d.last==today()||d.last==yest()?(d.n||0):0;
 const snap=u=>({n:u.n,t:u.d.t||0,zh:pc(u.d,"zh"),en:pc(u.d,"en"),st:sk(u.d)});
 const num=v=>Math.max(0,Math.min(100,+v||0));
-function clean(d){d=d||{};const o={n:Math.min(9999,Math.max(0,+d.n||0))|0,last:/^\d{4}-\d\d-\d\d$/.test(d.last)?d.last:"",t:+d.t||0};
+function clean(d){d=d||{};const o={n:Math.min(9999,Math.max(0,+d.n||0))|0,last:/^\d{4}-\d\d-\d\d$/.test(d.last)?d.last:"",t:+d.t||0,v:+d.v||0};
  for(const c in D){const z=d[c]||{};o[c]={p:{},x:{}};for(const k in z.p||{})o[c].p[+k]=num(z.p[k]);for(const k in z.x||{})o[c].x[+k]=num(z.x[k])}
  return o}
 function sync(){if(!CLOUD)return;clearTimeout(tm);tm=setTimeout(push,1200)}
@@ -215,7 +231,7 @@ async function push(){
 async function refresh(){
  const u=R.u[R.cur];if(!CLOUD||!u)return;
  try{const c=await cj("users/"+hx(u.n));
-  if(c&&c.d&&(+c.t||0)>(u.d.t||0)){u.d=clean(c.d);S=u.d;save();if(loc[0]=="home")home()}else push()
+  if(c&&c.d&&(+c.t||0)>(u.d.t||0)){u.d=mig(clean(c.d));S=u.d;save();if(loc[0]=="home")home()}else push()
  }catch(e){cs="off";if(loc[0]=="home")home()}
 }
 addEventListener("online",()=>{if(CLOUD)push()});
@@ -236,10 +252,10 @@ async function opn(n){
   $("#er").textContent="Memuat…";
   try{
    const c=await cj("users/"+hx(n));
-   if(c&&c.d){const d=clean(c.d);if(i<0){R.u.push({n:String(c.n||n).slice(0,20),d});i=R.u.length-1}else if(d.t>(R.u[i].d.t||0))R.u[i].d=d}
+   if(c&&c.d){const d=mig(clean(c.d));if(i<0){R.u.push({n:String(c.n||n).slice(0,20),d});i=R.u.length-1}else if(d.t>(R.u[i].d.t||0))R.u[i].d=d}
   }catch(e){cs="off"}
  }
- if(i<0){let d={};if(!R.u.length)try{const o=JSON.parse(localStorage.getItem("dwi")||"null");if(o&&typeof o=="object")d=o}catch(e){}R.u.push({n:String(n).slice(0,20),d});i=R.u.length-1}
+ if(i<0){let d={};if(!R.u.length)try{const o=JSON.parse(localStorage.getItem("dwi")||"null");if(o&&typeof o=="object")d=o}catch(e){}R.u.push({n:String(n).slice(0,20),d:mig(d)});i=R.u.length-1}
  R.cur=i;S=R.u[i].d;save();home();
  if(CLOUD)push();
 }
