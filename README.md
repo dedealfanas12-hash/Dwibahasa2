@@ -9,7 +9,7 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 - Latihan membaca, mengucapkan, menulis, dan pilihan ganda
 - Ujian naik level: 8 soal di level 1, lalu bertambah 2 soal tiap level (maksimal 30), lulus minimal 80%
 - Ujian akhir 40 soal untuk tiap tingkat sebelum tingkat berikutnya terbuka
-- Dashboard bersih: pilih Mandarin atau Inggris, lalu tingkat, lalu level
+- Dashboard bersih: pilih Mandarin atau Inggris, lalu tingkat, lalu level. Daftar level tampil sebagai peta jalur bergaya game: level selesai berbintang, level berikutnya berdenyut dengan tanda MULAI, dan ujian akhir ada di ujung jalur
 - Progres belajar per bahasa (persen level yang sudah lulus) dan streak 🔥 yang bertambah tiap hari ada soal yang dijawab
 - Masuk tanpa akun: cukup isi nama, dan tiap pengguna punya progres serta streak sendiri. Tanpa pengaturan tambahan, data tersimpan di browser (localStorage) dan terpisah per perangkat; dengan Firebase (bagian "Akun online"), akun tersimpan online dan semua pengguna bisa saling melihat progres
 - Mode gelap dan terang lewat tombol di pojok kanan atas (pilihan tersimpan)
