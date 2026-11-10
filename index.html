@@ -80,6 +80,10 @@ label{display:block;margin-bottom:.4rem;font-weight:600}
 .mp .pb{fill:none;stroke:var(--ln);stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round}
 .mp .dn{fill:none;stroke:var(--acc);stroke-width:5;stroke-linecap:round}
 .mp .nd:focus-visible .bd{stroke-width:9}
+button{touch-action:manipulation}
+.sm.on{background:var(--acc);color:var(--oa);border-color:var(--acc)}
+#tt{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90%;text-align:center;z-index:9;font-size:.9rem}
+#tt.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body class="zh"><main id="app"></main>
@@ -173,7 +177,43 @@ function lv(c=lang){let id=0,o=[];D[c].t.forEach((t,ti)=>t.forEach(([name,s],li)
 const all=()=>lv().flatMap(l=>l.it);
 const lvOpen=l=>l.id==1||(p=>p.ti!=l.ti?(P().x[p.ti]||0)>=EXP:(P().p[p.id]||0)>=PASS)(lv().find(z=>z.id==l.id-1));
 const exOpen=ti=>lv().filter(l=>l.ti==ti).every(l=>(P().p[l.id]||0)>=PASS);
-function sp(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=C().l;u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+let VO=[],tk=0,cb=null,lc=0;
+function loadV(){try{VO=window.speechSynthesis.getVoices()||[]}catch(e){}}
+try{loadV();const S0=window.speechSynthesis;if(S0.addEventListener)S0.addEventListener("voiceschanged",loadV);else S0.onvoiceschanged=loadV}catch(e){}
+function vo(L){
+ const k=L.toLowerCase().replace("_","-"),n=v=>(v.lang||"").toLowerCase().replace("_","-"),re=k.slice(0,2)=="zh"?/^(zh|cmn)/:new RegExp("^"+k.slice(0,2));
+ const V=VO.filter(v=>re.test(n(v)));
+ return V.find(v=>n(v)==k&&v.localService)||V.find(v=>n(v)==k)||V.find(v=>v.localService)||V[0]||null;
+}
+function toast(m){
+ let e=document.getElementById("tt");
+ if(!e){e=document.createElement("div");e.id="tt";document.body.appendChild(e)}
+ e.textContent=m;e.className="show";clearTimeout(toast.t);toast.t=setTimeout(()=>{e.className=""},3800);
+}
+function sp(t,b){
+ const S=window.speechSynthesis;
+ if(!S||typeof SpeechSynthesisUtterance=="undefined"){toast("Browser ini belum mendukung suara pengucapan.");return}
+ if(!VO.length)loadV();
+ const L=C().l,v=vo(L);
+ if(VO.length&&!v){toast("Suara "+C().n+" belum tersedia di perangkat ini. Aktifkan data suara "+C().n+" di pengaturan Text-to-speech.");return}
+ const id=++tk,on=x=>{if(b&&b.classList)b.classList.toggle("on",x)};
+ if(cb&&cb!==b&&cb.classList)cb.classList.remove("on");
+ cb=b;on(true);setTimeout(()=>{if(id==tk)on(false)},4500);
+ const go=()=>{
+  if(id!=tk)return;
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang=v?v.lang:L;if(v)u.voice=v;u.rate=.9;u.pitch=1;u.volume=1;
+  u.onend=u.onerror=()=>{if(id==tk)on(false)};
+  try{S.resume()}catch(e){}
+  S.speak(u);
+ };
+ let w=0;
+ if(S.speaking||S.pending){S.cancel();lc=Date.now();w=80}else{const g=Date.now()-lc;if(g<80)w=80-g}
+ if(w)setTimeout(go,w);else go();
+}
+function warm(){
+ try{const S=window.speechSynthesis;if(!S||S.speaking||S.pending)return;const u=new SpeechSynthesisUtterance(" ");u.volume=0;S.speak(u)}catch(e){}
+}
 const dk=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today=()=>dk(new Date()),yest=()=>{const d=new Date();return dk(new Date(d.getFullYear(),d.getMonth(),d.getDate()-1))};
 function touch(){S.t=Date.now();const t=today();if(S.last==t)return;S.n=S.last==yest()?(S.n||0)+1:1;S.last=t;save()}
@@ -222,7 +262,7 @@ function snd(t){
   }else{[[392,0],[370,.3],[349,.6]].forEach(([f,d])=>bz(f,d,.28,.97));bz(330,.9,.9,.82)}
  }catch(e){}
 }
-document.addEventListener("click",()=>{try{ac()}catch(e){}},{once:true});
+document.addEventListener("click",()=>{try{ac()}catch(e){}warm()},{once:true});
 let loc=["home"];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t=="dark":!!(window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)};
@@ -348,7 +388,7 @@ function levels(ti){
 }
 function lvScreen(id){loc=["lvScreen",id];
  const l=lv().find(z=>z.id==id);
- app.innerHTML=`<div class=hd><button class=sm onclick="levels(${l.ti})">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
+ app.innerHTML=`<div class=hd><button class=sm onclick="levels(${l.ti})">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t,this)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
 }
 const mk=(it,n,ty=TY)=>{let a=[],q=[];for(let i=0;i<n;i++){if(i%it.length==0)a=shuf(it);q.push({it:a[i%it.length],ty:ty[i%ty.length]})}return q};
 function drill(id,t){const l=lv().find(z=>z.id==id);run(mk(l.it,5,[t]),{kind:"dr",t:0,back:`lvScreen(${id})`})}
@@ -361,10 +401,10 @@ function ask(){
  A=zh?`${w} (${r}) = ${m}`:`${w} = ${m}`;
  const o=()=>{const a=shuf(all().filter(x=>x.w!=w)).sort((p,q)=>Math.abs(p.w.length-w.length)-Math.abs(q.w.length-w.length)).slice(0,3);a.push(Q[k].it);return shuf(a)};
  let b="";
- if(ty=="read")b=`<p>Baca, lalu pilih artinya</p><div class=big>${w}</div><button class=sm onclick="sp(Q[k].it.w)">🔊 Dengar</button>${o().map(x=>`<button class=opt data-k="${x.w==w?1:0}" onclick="pick(this)">${x.m}</button>`).join("")}`;
+ if(ty=="read")b=`<p>Baca, lalu pilih artinya</p><div class=big>${w}</div><button class=sm onclick="sp(Q[k].it.w,this)">🔊 Dengar</button>${o().map(x=>`<button class=opt data-k="${x.w==w?1:0}" onclick="pick(this)">${x.m}</button>`).join("")}`;
  else if(ty=="mc")b=`<p>Pilih terjemahan yang tepat</p><div class=big>${m}</div>${o().map(x=>`<button class=opt data-k="${x.w==w?1:0}" onclick="pick(this)"><span>${x.w}</span><small>${x.r}</small></button>`).join("")}`;
  else if(ty=="write")b=`<p>Tulis dalam ${zh?"hanzi atau pinyin":"bahasa Inggris"}</p><div class=big>${m}</div><input id=ans autocomplete=off autocapitalize=off><button class=btn onclick="chk()">Periksa</button>`;
- else b=`<p>Ucapkan dengan lantang</p><div class=big>${w}</div><small>${r}</small><p class=mut>${m}</p><button class=sm onclick="sp(Q[k].it.w)">🔊 Dengar</button> <button class=btn onclick="mic(this)">🎤 Ucapkan</button>`;
+ else b=`<p>Ucapkan dengan lantang</p><div class=big>${w}</div><small>${r}</small><p class=mut>${m}</p><button class=sm onclick="sp(Q[k].it.w,this)">🔊 Dengar</button> <button class=btn onclick="mic(this)">🎤 Ucapkan</button>`;
  app.innerHTML=`<button class=sm onclick="${ctx.back}">Keluar</button> <span class=mut>Soal ${k+1} dari ${Q.length}</span><div class=q>${b}<div id=fb></div></div>`;
 }
 function pick(b){const ok=b.dataset.k=="1";document.querySelectorAll(".opt").forEach(x=>{if(x.dataset.k=="1")x.classList.add("ok")});if(!ok)b.classList.add("bad");fb(ok)}

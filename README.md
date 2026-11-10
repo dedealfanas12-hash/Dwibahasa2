@@ -70,3 +70,5 @@ Pengaturan lain ada tepat di bawah data: `PASS` (nilai lulus level), `EXP` (nila
 ## Catatan
 
 Latihan mengucapkan memakai pengenalan suara browser. Paling lancar di Chrome dan harus lewat https, yang sudah dipenuhi GitHub Pages. Kalau browser tidak mendukung, tombol konfirmasi manual muncul sebagai gantinya.
+
+Suara pengucapan (tombol 🔊) memakai suara bawaan perangkat. Kalau tidak terdengar atau terlambat, pastikan data suara bahasa Mandarin dan Inggris sudah terpasang di pengaturan Text-to-speech (Android) atau Spoken Content (iPhone).
