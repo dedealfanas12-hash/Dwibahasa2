@@ -40,7 +40,7 @@ Secara bawaan data hanya tersimpan di browser masing-masing. Agar akun bisa dibu
 
 4. Di `index.html`, cari baris `const DB="";` (baris pertama di dalam script), isi dengan URL tadi (tanpa garis miring di akhir), lalu commit.
 
-Setelah itu layar login menampilkan daftar "Semua pengguna", dan dashboard punya tombol "Lihat progres pengguna lain". Data disimpan di jalur `/dwibahasa`, jadi tidak bercampur dengan data lain di database yang sama.
+Setelah itu layar login menampilkan daftar "Semua pengguna", dan dashboard punya ikon 🏆 untuk melihat progres semua pengguna dan ikon 👤 untuk ganti pengguna. Data disimpan di jalur `/dwibahasa`, jadi tidak bercampur dengan data lain di database yang sama.
 
 Catatan: akun bersifat publik dan tanpa kata sandi. Siapa pun bisa membuka dan mengubah progres akun mana pun, dan siapa pun yang tahu URL database bisa menulis di jalur `dwibahasa`. Cocok untuk belajar bersama dalam kelompok kecil. Jika perlu pembatasan, tambahkan kata sandi atau PIN per akun.
 

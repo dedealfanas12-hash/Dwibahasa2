@@ -84,6 +84,8 @@ button{touch-action:manipulation}
 .sm.on{background:var(--acc);color:var(--oa);border-color:var(--acc)}
 #tt{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90%;text-align:center;z-index:9;font-size:.9rem}
 #tt.show{opacity:1;transform:translate(-50%,0)}
+.gr{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem;margin:.4rem 0}
+.gr p{margin:0;flex:1}
 </style>
 </head>
 <body class="zh"><main id="app"></main>
@@ -353,7 +355,7 @@ window.addEventListener("popstate",()=>{let r=false;try{r=up()}catch(e){}if(r){t
 function home(){
  loc=["home"];
  const n=streak(),on=S.last==today();
- let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."} <button class=lk onclick="login()">Ganti pengguna</button> <button class=lk onclick="board()">Lihat progres pengguna lain</button></p>${CLOUD?"<small class=mut>"+(cs=="off"?"⚠️ Belum tersinkron, akan dicoba lagi saat online":"☁️ Progresmu tersimpan online")+"</small>":""}${ip?'<button class=btn onclick="inst()">Instal aplikasi di perangkat ini</button>':""}`;
+ let h=`<div class=hd><h1>Dwibahasa</h1><div class=tb>${themeBtn()}<div class="fire ${on?"on":""}" title="Streak belajar"><span>🔥</span><b>${n}</b></div></div></div><div class=gr><p class=mut>Halo, <b>${esc(R.u[R.cur].n)}</b>. ${on?"Hari ini sudah belajar, apimu menyala!":n?"Jawab satu soal hari ini untuk menjaga apimu.":"Jawab satu soal hari ini untuk menyalakan api."}</p><span class=tb><button class="sm th" title="Progres semua pengguna" aria-label="Progres semua pengguna" onclick="board()">🏆</button><button class="sm th" title="Ganti pengguna" aria-label="Ganti pengguna" onclick="login()">👤</button></span></div>${CLOUD?"<small class=mut>"+(cs=="off"?"⚠️ Belum tersinkron, akan dicoba lagi saat online":"☁️ Progresmu tersimpan online")+"</small>":""}${ip?'<button class=btn onclick="inst()">Instal aplikasi di perangkat ini</button>':""}`;
  Object.keys(D).forEach(c=>{const[d,t,p]=cp(c);h+=`<button class="cat ${c}" onclick="tiers('${c}')"><span class=big>${c=="zh"?"中文":"English"}</span><span>${D[c].n}</span><span class=bar><i style="width:${p}%"></i></span><small>${p}% selesai, ${d} dari ${t} level</small></button>`});
  app.innerHTML=h;
 }
