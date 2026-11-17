@@ -86,6 +86,24 @@ button{touch-action:manipulation}
 #tt.show{opacity:1;transform:translate(-50%,0)}
 .gr{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem;margin:.4rem 0}
 .gr p{margin:0;flex:1}
+.hzs{display:block;width:min(100%,320px);aspect-ratio:1;margin:.6rem auto;background:var(--cd);border-radius:12px}
+.gb{fill:none;stroke:var(--ln);stroke-width:8}
+.gl{fill:none;stroke:var(--ln);stroke-width:5;stroke-dasharray:22 18}
+.go{fill:var(--ln);opacity:.55}
+.gd{fill:var(--ink)}
+.gc{fill:var(--acc)}
+.ga{fill:none;stroke:var(--ink);stroke-width:170;stroke-linecap:round;stroke-linejoin:round;visibility:hidden}
+.gnt{font-size:70px;font-weight:700;fill:var(--acc);stroke:var(--cd);stroke-width:16;paint-order:stroke;text-anchor:middle;visibility:hidden}
+.ctl{display:flex;justify-content:center;gap:.6rem;margin:.4rem 0 1rem}
+.ctl .sm{font-size:1.2rem;padding:.3rem .9rem}
+.strip{display:flex;flex-wrap:wrap;gap:.5rem}
+.strip div{text-align:center;font-size:.75rem;color:var(--mut)}
+.strip svg{display:block;width:64px;height:64px;background:var(--cd);border:1px solid var(--ln);border-radius:6px}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:.4rem 0}
+.chip{font-size:1.6rem;padding:.2rem .8rem;border:1px solid var(--ln);border-radius:8px;background:var(--cd)}
+.chip.on{background:var(--acc);color:var(--oa);border-color:var(--acc)}
+.hzh{display:flex;align-items:center;gap:.8rem;margin:.6rem 0}
+.hzc{font:3rem/1 Georgia,"Songti SC","Noto Serif SC",serif}
 </style>
 </head>
 <body class="zh"><main id="app"></main>
@@ -343,6 +361,7 @@ function start(){if(R.theme)document.documentElement.dataset.theme=R.theme;R.cur
 const go=s=>{const m=/^(\w+)\((.*)\)$/.exec(s);window[m[1]](m[2]?JSON.parse(m[2]):undefined)};
 function up(){const p=loc[0];
  if(p=="quiz")go(ctx.back);
+ else if(p=="hz")lvScreen(loc[1]);
  else if(p=="lvScreen")levels(lv().find(l=>l.id==loc[1]).ti);
  else if(p=="levels")tiers(lang);
  else if(p=="tiers"||p=="board")home();
@@ -388,9 +407,73 @@ function levels(ti){
  app.innerHTML=`<div class=hd><button class=sm onclick="tiers('${lang}')">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">${D[lang].n}: ${tn}</h2><p class=mut>${nd} dari ${n} level selesai. Ketuk lingkaran untuk belajar.</p><svg class="mp" viewBox="0 0 320 ${Y(n)+110}" role="group" aria-label="Peta level ${tn}"><path class="pb" d="${base}"/><path class="dn" d="${dp}"/>${g}${bb}</svg>`;
  setTimeout(()=>{try{const e=document.getElementById("cur");if(e)e.scrollIntoView({block:"center"})}catch(x){}},40);
 }
+let HZ=null,HZP=null,hzA=null,hzSlow=0;
+function hzLoad(){
+ if(HZ)return Promise.resolve(HZ);
+ if(window.HZ_DATA){HZ=window.HZ_DATA;return Promise.resolve(HZ)}
+ if(!HZP)HZP=fetch("hanzi.json?v=1").then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(j=>(HZ=j)).catch(e=>{HZP=null;throw e});
+ return HZP;
+}
+const HT='transform="scale(1,-1) translate(0,-900)"';
+function hzThumb(g,k){
+ return `<svg viewBox="0 0 1024 1024" role="img" aria-label="Goresan 1 sampai ${k}"><path d="M512 8V1016M8 512H1016" class="gl"/><g ${HT}>${g.s.map((d,i)=>`<path d="${d}" class="${i<k-1?"gd":i==k-1?"gc":"go"}"/>`).join("")}</g></svg>`;
+}
+async function hzv(lid,wi,ci){
+ loc=["hz",lid,wi,ci];hzA=null;
+ const l=lv().find(z=>z.id==lid),it=l.it[wi],ch=[...it.w].filter(c=>/[\u4e00-\u9fff]/.test(c)),c=ch[ci]||ch[0];
+ const hd=`<div class=hd><button class=sm onclick="lvScreen(${lid})">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Cara menulis hanzi</h2>`;
+ app.innerHTML=hd+"<p class=mut>Memuat data goresan…</p>";
+ let Z;
+ try{Z=await hzLoad()}catch(e){if(loc[0]=="hz")app.innerHTML=hd+"<p class=nope>Data goresan belum bisa dimuat. Pastikan file hanzi.json ada di situs ini dan perangkat sedang online saat pertama kali dibuka.</p>";return}
+ if(loc[0]!="hz"||loc[1]!=lid||loc[2]!=wi||loc[3]!=ci)return;
+ const g=Z[c],chips=ch.length>1?`<div class=chips>${ch.map((x,j)=>`<button class="chip${j==ci?" on":""}" onclick="hzv(${lid},${wi},${j})">${esc(x)}</button>`).join("")}</div>`:"";
+ const info=`<div class=hzh><span class=hzc>${esc(c)}</span><div><b>${esc(it.w.length>1?it.w+" ("+it.r+")":it.r)}</b><br><span class=mut>${esc(it.m)}</span>${g?`<br><small>${g.s.length} goresan</small>`:""}</div></div>`;
+ if(!g){app.innerHTML=hd+info+chips+"<p class=mut>Data goresan karakter ini belum tersedia.</p>";return}
+ const svg=`<svg id="hzs" class="hzs" viewBox="0 0 1024 1024" role="img" aria-label="Animasi urutan goresan ${esc(c)}"><defs>${g.s.map((d,i)=>`<clipPath id="hc${i}"><path d="${d}"/></clipPath>`).join("")}</defs><rect x="8" y="8" width="1008" height="1008" class="gb"/><path d="M8 8L1016 1016M1016 8L8 1016M512 8V1016M8 512H1016" class="gl"/><g ${HT}>${g.s.map(d=>`<path d="${d}" class="go"/>`).join("")}${g.m.map((m,i)=>`<path id="ha${i}" class="ga" clip-path="url(#hc${i})" d="M${m.map(p=>p[0]+" "+p[1]).join("L")}"/>`).join("")}</g>${g.m.map((m,i)=>`<text id="hn${i}" class="gnt" x="${m[0][0]}" y="${900-m[0][1]}">${i+1}</text>`).join("")}</svg>`;
+ const ctl=`<div class=ctl><button class=sm onclick="hzr()" title="Ulangi dari awal" aria-label="Ulangi dari awal">⏮</button><button class=sm id=hzp onclick="hzt()" title="Putar atau jeda" aria-label="Putar atau jeda">⏸</button><button class=sm onclick="hzn()" title="Goresan berikutnya" aria-label="Goresan berikutnya">⏭</button><button class="sm${hzSlow?" on":""}" onclick="hzw(this)" title="Pelan atau normal" aria-label="Pelan atau normal">🐢</button></div>`;
+ const strip=`<h3>Urutan goresan untuk ditiru di buku</h3><div class=strip>${g.s.map((_,k)=>`<div>${hzThumb(g,k+1)}${k+1}</div>`).join("")}</div>`;
+ app.innerHTML=hd+info+chips+svg+ctl+strip;
+ hzStart(g);
+}
+function hzStart(g){
+ const P=g.m.map(m=>{let L=0;for(let j=1;j<m.length;j++)L+=Math.hypot(m[j][0]-m[j-1][0],m[j][1]-m[j-1][1]);return Math.max(L,1)});
+ const du=P.map(L=>.35+L/1400),st=[];let t=0;du.forEach(x=>{st.push(t);t+=x+.25});
+ const a=hzA={P,du,st,T:t,t:0,run:true,last:0,k:hzSlow?1.8:1,stop:null,n:P.length};
+ hzDraw();requestAnimationFrame(ts=>hzLoop(a,ts));
+}
+function hzDraw(){
+ const a=hzA;if(!a)return;
+ for(let i=0;i<a.n;i++){
+  const e=document.getElementById("ha"+i),nn=document.getElementById("hn"+i);if(!e)return;
+  const p=Math.min(1,Math.max(0,(a.t-a.st[i])/a.du[i]));
+  e.style.visibility=p>0?"visible":"hidden";e.style.strokeDasharray=a.P[i]+" "+a.P[i];e.style.strokeDashoffset=String(a.P[i]*(1-p));e.style.stroke=p<1?"var(--acc)":"var(--ink)";
+  if(nn)nn.style.visibility=p>0?"visible":"hidden";
+ }
+}
+function hzLoop(a,ts){
+ if(a!==hzA||!document.getElementById("hzs"))return;
+ if(a.run){
+  if(a.last)a.t+=(ts-a.last)/1000/a.k;
+  a.last=ts;
+  if(a.stop!=null&&a.t>=a.stop){a.t=a.stop;a.stop=null;hzRun(false)}
+  else if(a.t>=a.T+.8)a.t=0;
+ }else a.last=0;
+ hzDraw();requestAnimationFrame(x=>hzLoop(a,x));
+}
+function hzRun(r){const a=hzA;if(!a)return;a.run=r;a.last=0;const b=document.getElementById("hzp");if(b)b.textContent=r?"⏸":"▶"}
+function hzt(){const a=hzA;if(!a)return;if(a.t>=a.T)a.t=0;hzRun(!a.run)}
+function hzr(){const a=hzA;if(!a)return;a.t=0;a.stop=null;hzRun(true)}
+function hzn(){
+ const a=hzA;if(!a)return;
+ let k=0;while(k<a.n&&a.t>=a.st[k]+a.du[k]-1e-6)k++;
+ if(k>=a.n){a.t=0;k=0}
+ a.stop=a.st[k]+a.du[k];if(a.t<a.st[k])a.t=a.st[k];
+ hzRun(true);
+}
+function hzw(b){hzSlow=hzSlow?0:1;if(hzA)hzA.k=hzSlow?1.8:1;b.classList.toggle("on",!!hzSlow)}
 function lvScreen(id){loc=["lvScreen",id];
  const l=lv().find(z=>z.id==id);
- app.innerHTML=`<div class=hd><button class=sm onclick="levels(${l.ti})">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map(x=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t,this)">🔊</button><div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
+ app.innerHTML=`<div class=hd><button class=sm onclick="levels(${l.ti})">Kembali</button>${themeBtn()}</div><h2 style="margin-top:1rem">Level ${id}: ${l.name}</h2>${l.it.map((x,i)=>`<div class=v><button class=sm data-t="${x.w}" onclick="sp(this.dataset.t,this)">🔊</button>${lang=="zh"?`<button class="sm" onclick="hzv(${l.id},${i},0)" title="Cara menulis" aria-label="Cara menulis ${esc(x.w)}">✍️</button>`:""}<div><b>${x.w}</b> <small>${x.r}</small><br><span class=mut>${x.m}</span></div></div>`).join("")}<h3>Latihan bebas, 5 soal</h3><div class=g>${[["read","📖 Membaca"],["speak","🎤 Mengucapkan"],["write","✍️ Menulis"],["mc","✅ Pilihan ganda"]].map(([t,n])=>`<button class=btn onclick="drill(${id},'${t}')">${n}</button>`).join("")}</div><h3>Ujian naik level</h3><button class=btn onclick="quiz(${id})">Mulai ujian: ${l.n} soal, lulus ${PASS}%</button>`;
 }
 const mk=(it,n,ty=TY)=>{let a=[],q=[];for(let i=0;i<n;i++){if(i%it.length==0)a=shuf(it);q.push({it:a[i%it.length],ty:ty[i%ty.length]})}return q};
 function drill(id,t){const l=lv().find(z=>z.id==id);run(mk(l.it,5,[t]),{kind:"dr",t:0,back:`lvScreen(${id})`})}

@@ -18,7 +18,7 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 ## Online lewat GitHub Pages
 
 1. Buat repo baru di GitHub (Public), misalnya `dwibahasa`.
-2. Upload semua file di folder ini ke repo: `index.html`, `manifest.json`, `sw.js`, tiga file ikon `.png`, dan `README.md` (Add file, Upload files, Commit changes).
+2. Upload semua file di folder ini ke repo: `index.html`, `manifest.json`, `sw.js`, tiga file ikon `.png`, `hanzi.json`, `HANZI-DATA-LICENSE.txt`, dan `README.md` (Add file, Upload files, Commit changes).
 3. Buka Settings, Pages. Pada Source pilih **Deploy from a branch**, Branch `main`, folder `/ (root)`, lalu Save.
 4. Tunggu sekitar 1 menit. Alamatnya: `https://USERNAME.github.io/dwibahasa/`
 
@@ -72,3 +72,7 @@ Pengaturan lain ada tepat di bawah data: `PASS` (nilai lulus level), `EXP` (nila
 Latihan mengucapkan memakai pengenalan suara browser. Paling lancar di Chrome dan harus lewat https, yang sudah dipenuhi GitHub Pages. Kalau browser tidak mendukung, tombol konfirmasi manual muncul sebagai gantinya.
 
 Suara pengucapan (tombol 🔊) memakai suara bawaan perangkat. Kalau tidak terdengar atau terlambat, pastikan data suara bahasa Mandarin dan Inggris sudah terpasang di pengaturan Text-to-speech (Android) atau Spoken Content (iPhone).
+
+## Animasi cara menulis hanzi
+
+Di pelajaran Mandarin, ketuk ikon ✍️ di samping kata untuk melihat animasi urutan goresan, lengkap dengan nomor goresan dan diagram per langkah yang bisa ditiru di buku. Data goresan ada di file `hanzi.json` (287 karakter dari seluruh materi) yang harus berada di folder yang sama dengan `index.html`. Sumber data: Make Me a Hanzi lewat paket hanzi-writer-data, berlisensi Arphic Public License (teks lisensinya ada di `HANZI-DATA-LICENSE.txt`). Kalau kamu menambah kosakata Mandarin dengan karakter baru, data goresannya juga perlu ditambahkan ke `hanzi.json`. Karakter tanpa data akan menampilkan pesan bahwa data goresannya belum tersedia.
