@@ -24,6 +24,10 @@ Web app belajar bahasa Mandarin dan Inggris dari tingkat Dasar, Menengah, sampai
 
 Netlify juga bisa: hubungkan repo ini, kosongkan build command, dan isi publish directory dengan `/`.
 
+## Materi pola kalimat dan filosofi kata
+
+Tiap pelajaran Mandarin (HSK 1) dan tiap modul Inggris punya tombol 📖 di layar level. Isinya pola kalimat (rumus, penjelasan, dan contoh yang bisa didengarkan) serta pembahasan tiap kata. Untuk Mandarin, setiap hanzi diuraikan komponennya (ideograf, piktograf, atau piktofonetik) lengkap dengan catatan filosofinya, dan ada tombol ✍️ ke animasi goresan. Untuk Inggris, kata tertentu diberi catatan asal-usul kata. Uraian komponen hanzi dibuat otomatis dari kamus Make Me a Hanzi, sedangkan pola kalimat dan catatan filosofi ditulis manual. Sebagian penjelasan asal-usul adalah tafsiran tradisional atau alat bantu mengingat, bukan selalu fakta sejarah yang pasti. Materi baru tersedia untuk tingkat Dasar.
+
 ## Akun online (semua orang bisa saling melihat progres)
 
 Secara bawaan data hanya tersimpan di browser masing-masing. Agar akun bisa dibuka dari perangkat mana pun dan progres bisa dilihat semua orang, aplikasi memakai Firebase Realtime Database (gratis untuk pemakaian kecil, tanpa server sendiri).
